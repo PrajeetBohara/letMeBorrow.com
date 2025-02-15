@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories - Buy & Sell</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 20px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    .header {
+      text-align: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .header h1 {
+      margin: 0;
+      color: #333;
+    }
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px 0;
+    }
+    .category-card {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    .category-card img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .category-card h2 {
+      margin: 10px 0 0;
+      font-size: 18px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Categories</h1>
+    </div>
+    <div class="categories">
+      <div class="category-card">
+        <img src="images/electronics.jpg" alt="Electronics">
+        <h2>Electronics</h2>
+      </div>
+      <div class="category-card">
+        <img src="images/clothing.jpg" alt="Clothing">
+        <h2>Clothing</h2>
+      </div>
+      <div class="category-card">
+        <img src="images/books.jpg" alt="Books">
+        <h2>Books</h2>
+      </div>
+      <div class="category-card">
+        <img src="images/furniture.jpg" alt="Furniture">
+        <h2>Furniture</h2>
+      </div>
+      <div class="category-card">
+        <img src="images/toys.jpg" alt="Toys">
+        <h2>Toys</h2>
+      </div>
+      <div class="category-card">
+        <img src="images/sports.jpg" alt="Sports">
+        <h2>Sports</h2>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
