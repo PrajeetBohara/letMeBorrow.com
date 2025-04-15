@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Tools - letmeBurrow</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="browse.css">
+  <script>
+    function filterItems() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const cards = document.querySelectorAll(".tool-card");
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(query) ? "block" : "none";
+      });
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo-section">
+        <img src="images/logo.png" alt="Logo" class="logo">
+        <h1>letmeBurrow</h1>
+      </div>
+      <nav class="nav-section">
+        <a href="homepage.html">Home</a>
+        <a href="browse.html">Browse</a>
+        <a href="categories.html">Categories</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="browse-container">
+    <div class="search-bar">
+      <input type="text" id="searchInput" onkeyup="filterItems()" placeholder="Search tools...">
+    </div>
+
+    <div class="tool-grid">
+      <div class="tool-card">
+        <img src="images/drill-set.png" alt="Cordless Drill">
+        <h3>Cordless Drill</h3>
+        <p>Compact and powerful drill set</p>
+        <div class="price">$35/day</div>
+        <button>Rent Now</button>
+      </div>
+      <div class="tool-card">
+        <img src="images/tire-inflator.png" alt="Air Compressor">
+        <h3>Air Compressor</h3>
+        <p>Portable air compressor with attachments</p>
+        <div class="price">$35/day</div>
+        <button>Rent Now</button>
+      </div>
+      <div class="tool-card">
+        <img src="images/tool-set.png" alt="Socket Tool Set">
+        <h3>Socket Tool Set</h3>
+        <p>Complete socket and wrench set</p>
+        <div class="price">$42/day</div>
+        <button>Rent Now</button>
+      </div>
+      <div class="tool-card">
+        <img src="images/pressure-washer.png" alt="Pressure Washer">
+        <h3>Pressure Washer</h3>
+        <p>2000 PSI electric washer</p>
+        <div class="price">$30/day</div>
+        <button>Rent Now</button>
+      </div>
+      <div class="tool-card">
+        <img src="images/clamp-set.png" alt="Clamp Set">
+        <h3>Clamp Set</h3>
+        <p>Heavy-duty clamps for woodworking</p>
+        <div class="price">$10/day</div>
+        <button>Rent Now</button>
+      </div>
+      <div class="tool-card">
+        <img src="images/lawn-mower.png" alt="Lawn Mower">
+        <h3>Lawn Mower</h3>
+        <p>Electric mower ideal for small lawns</p>
+        <div class="price">$25/day</div>
+        <button>Rent Now</button>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
