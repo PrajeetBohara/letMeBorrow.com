@@ -1,143 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>letmeBurrow.com</title>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="product-listing.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>letmeBurrow.com</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script defer>
+        // Slideshow
+        let slideIndex = 0;
+        function showSlides() {
+            let slides = document.getElementsByClassName("slides");
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1; }
+            slides[slideIndex - 1].style.display = "block";
+            setTimeout(showSlides, 3000);
+        }
+        document.addEventListener("DOMContentLoaded", showSlides);
+
+        // Form Validation
+        function validateForm() {
+            const name = document.forms["contactForm"]["name"].value;
+            const email = document.forms["contactForm"]["email"].value;
+            const message = document.forms["contactForm"]["message"].value;
+            if (!name || !email || !message) {
+                alert("Please fill out all fields.");
+                return false;
+            }
+            if (!email.includes("@")) {
+                alert("Please enter a valid email address.");
+                return false;
+            }
+            alert("Form submitted successfully!");
+            return true;
+        }
+    </script>
 </head>
 <body>
 
 <header>
-  <div class="header-container">
-    <div class="logo-section">
-      <img src="images/logo.png" alt="Logo" class="logo">
-      <h1>letmeBurrow.com</h1>
+    <div class="header-container">
+        <div class="logo-section">
+            <img src="images/logo.png" alt="Site logo" class="logo">
+            <h1>letmeBurrow</h1>
+        </div>
+        <div class="search-section" role="search">
+            <input type="text" aria-label="Search items" placeholder="Search items..." name="search">
+            <button type="submit">Search</button>
+        </div>
+        <nav class="nav-section" aria-label="Main navigation">
+            <a href="homepage.html">Home</a>
+            <a href="#">Browse</a>
+            <a href="#">Categories</a>
+            <a href="#contact">Contact</a>
+        </nav>
     </div>
-    <div class="search-section">
-      <input type="text" placeholder="Search items..." name="search" />
-      <button type="submit">Search</button>
-    </div>
-    <nav class="nav-section">
-      <a href="#">Home</a>
-      <a href="#">Browse</a>
-      <a href="#">Categories</a>
-      <a href="#">About</a>
-    </nav>
-  </div>
 </header>
 
 <main>
-  <!-- Slideshow -->
-  <section class="slideshow-container">
-    <div class="slides fade">
-      <img src="images/image1.png" alt="Item 1" />
-      <div class="slide-caption">New Arrival</div>
-    </div>
-    <div class="slides fade">
-      <img src="images/image2.png" alt="Item 2" />
-      <div class="slide-caption">New Arrival</div>
-    </div>
-    <div class="slides fade">
-      <img src="images/image3.png" alt="Item 3" />
-      <div class="slide-caption">New Arrival</div>
-    </div>
-  </section>
-
-  <!-- Main Product Layout -->
-  <section class="product-layout">
-    <!-- Left: Categories -->
-    <aside class="sidebar categories">
-      <h3>Categories</h3>
-      <ul>
-        <li>Electronics</li>
-        <li>Fashion</li>
-        <li>Books</li>
-        <li>Furniture</li>
-        <li>Sports</li>
-      </ul>
-    </aside>
-
-    <!-- Center: Product List -->
-    <section class="product-list">
-      <!-- Product 1 -->
-      <div class="product-card">
-        <img src="images/image4.png" alt="Item 1" />
-        <div class="product-info">
-          <h3>Drain Clog Remover</h3>
-          <p class="price">$210.00</p>
-          <button class="desc-btn" onclick="toggleDescription('desc1')">View Description</button>
-          <div id="desc1" class="description-content">
-            <p>This is the detailed description of the first item.</p>
-          </div>
+    <section class="slideshow-container" aria-label="Featured tools slideshow">
+        <div class="slides fade">
+            <img src="images/image1.png" alt="Cordless Drill">
+            <div class="slide-caption">Cordless Drill Set</div>
         </div>
-      </div>
-
-      <!-- Product 2 -->
-      <div class="product-card">
-        <img src="images/image5.png" alt="Item 2" />
-        <div class="product-info">
-          <h3>Rigid Pipe Wrenches</h3>
-          <p class="price">$30.00</p>
-          <button class="desc-btn" onclick="toggleDescription('desc2')">View Description</button>
-          <div id="desc2" class="description-content">
-            <p>This is the detailed description of the second item.</p>
-          </div>
+        <div class="slides fade">
+            <img src="images/image2.png" alt="Mini Air Compressor">
+            <div class="slide-caption">Mini Air Compressor</div>
         </div>
-      </div>
+        <div class="slides fade">
+            <img src="images/image3.png" alt="Socket Tool Set">
+            <div class="slide-caption">Socket Tool Set</div>
+        </div>
     </section>
 
-    <!-- Right: Filters -->
-    <aside class="sidebar filters">
-      <h3>Filters</h3>
-      <div>
-        <label>Price:</label>
-        <input type="range" min="0" max="500" />
-      </div>
-      <div>
-        <label>Review:</label>
-        <select>
-          <option>Any</option>
-          <option>4 Stars & up</option>
-          <option>3 Stars & up</option>
-        </select>
-      </div>
-      <div>
-        <label><input type="checkbox" /> Show on Map</label>
-      </div>
-    </aside>
-  </section>
+    <section class="featured-items">
+        <h2>Featured Items</h2>
+        <div class="item-card">
+            <img src="images/image4.png" alt="Ryobi Pressure Washer">
+            <div class="item-info">
+                <h3>Pressure Washer</h3>
+                <p>2000 PSI electric washer for outdoor cleaning.</p>
+                <span class="price">$35/day</span>
+                <button class="buy-btn">Rent Now</button>
+            </div>
+        </div>
+        <div class="item-card">
+            <img src="images/image5.png" alt="Clamp Set">
+            <div class="item-info">
+                <h3>Clamp Set</h3>
+                <p>Set of metal clamps for woodworking projects.</p>
+                <span class="price">$10/day</span>
+                <button class="buy-btn">Rent Now</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <h2>Contact Us</h2>
+        <form name="contactForm" onsubmit="return validateForm()" aria-label="Contact form" class="contact-form">
+            <input type="text" name="name" placeholder="Your Name" aria-label="Name">
+            <input type="email" name="email" placeholder="Your Email" aria-label="Email">
+            <textarea name="message" placeholder="Your Message" aria-label="Message"></textarea>
+            <input type="submit" value="Send">
+        </form>
+    </section>
 </main>
 
 <footer>
-  <p>&copy; 2025 letmeBurrow.com | All Rights Reserved</p>
+    <p>&copy; 2025 letmeBurrow.com | All Rights Reserved</p>
 </footer>
-
-<script>
-  // Slideshow functionality
-  let slideIndex = 0;
-  showSlides();
-  function showSlides() {
-    let slides = document.getElementsByClassName("slides");
-    for (let i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-    }
-    slideIndex++;
-    if (slideIndex > slides.length) {
-      slideIndex = 1;
-    }
-    slides[slideIndex - 1].style.display = "block";
-    setTimeout(showSlides, 3000);
-  }
-
-  // Toggle product description
-  function toggleDescription(id) {
-    let desc = document.getElementById(id);
-    desc.style.display = desc.style.display === "block" ? "none" : "block";
-  }
-</script>
 
 </body>
 </html>
