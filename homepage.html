@@ -1,85 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>letmeBurrow.com</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>letmeBurrow.com</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="product-listing.css" />
 </head>
 <body>
 
-    <header>
-        <div class="header-container">
-            <!-- Logo Left -->
-            <div class="logo-section">
-                <img src="/images/logo.png" alt="Logo" class="logo">
-                <h1>letmeBurrow.com</h1>
-            </div>
+<header>
+  <div class="header-container">
+    <div class="logo-section">
+      <img src="images/logo.png" alt="Logo" class="logo">
+      <h1>letmeBurrow.com</h1>
+    </div>
+    <div class="search-section">
+      <input type="text" placeholder="Search items..." name="search" />
+      <button type="submit">Search</button>
+    </div>
+    <nav class="nav-section">
+      <a href="#">Home</a>
+      <a href="#">Browse</a>
+      <a href="#">Categories</a>
+      <a href="#">About</a>
+    </nav>
+  </div>
+</header>
 
-            <!-- Search Center -->
-            <div class="search-section">
-                <input type="text" placeholder="Search items..." name="search">
-                <button type="submit">Search</button>
-            </div>
+<main>
+  <!-- Slideshow -->
+  <section class="slideshow-container">
+    <div class="slides fade">
+      <img src="images/image1.png" alt="Item 1" />
+      <div class="slide-caption">New Arrival</div>
+    </div>
+    <div class="slides fade">
+      <img src="images/image2.png" alt="Item 2" />
+      <div class="slide-caption">New Arrival</div>
+    </div>
+    <div class="slides fade">
+      <img src="images/image3.png" alt="Item 3" />
+      <div class="slide-caption">New Arrival</div>
+    </div>
+  </section>
 
-            <!-- Navigation Right -->
-            <nav class="nav-section">
-                <a href="homepage.html">Home</a>
-                <a href="Browse.html">Browse</a>
-                <a href="Categories.html">Categories</a>
-                <a href="About.html">About</a>
-            </nav>
+  <!-- Main Product Layout -->
+  <section class="product-layout">
+    <!-- Left: Categories -->
+    <aside class="sidebar categories">
+      <h3>Categories</h3>
+      <ul>
+        <li>Electronics</li>
+        <li>Fashion</li>
+        <li>Books</li>
+        <li>Furniture</li>
+        <li>Sports</li>
+      </ul>
+    </aside>
+
+    <!-- Center: Product List -->
+    <section class="product-list">
+      <!-- Product 1 -->
+      <div class="product-card">
+        <img src="images/image4.png" alt="Item 1" />
+        <div class="product-info">
+          <h3>Drain Clog Remover</h3>
+          <p class="price">$210.00</p>
+          <button class="desc-btn" onclick="toggleDescription('desc1')">View Description</button>
+          <div id="desc1" class="description-content">
+            <p>This is the detailed description of the first item.</p>
+          </div>
         </div>
-    </header>
+      </div>
 
-    <main>
-        
-            <main>
-                <!-- Slideshow Section -->
-                <section class="slideshow-container">
-            
-                    <div class="slides fade">
-                        <img src="images/image1.png" alt="Item 1">
-                        <div class="slide-caption">New Arrival 1</div>
-                    </div>
-            
-                    <div class="slides fade">
-                        <img src="images/image1.png" alt="Item 2">
-                        <div class="slide-caption">New Arrival 2</div>
-                    </div>
-            
-                    <div class="slides fade">
-                        <img src="images/image1.png" alt="Item 3">
-                        <div class="slide-caption">New Arrival 3</div>
-                    </div>
-            
-                    <!-- Prev/Next Buttons -->
-                    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
-            
-                </section>
-            
-                <!-- Featured Items -->
-                <section class="featured-items">
-                    <h2>Featured Items</h2>
-                    <div class="item-card">
-                        <img src="placeholder.png" alt="Item">
-                        <div class="item-info">
-                            <h3>Item Name</h3>
-                            <p>Description goes here.</p>
-                            <span class="price">$Price</span>
-                            <button class="buy-btn">Buy Now</button>
-                        </div>
-                    </div>
-                    <!-- Duplicate item-card as needed -->
-                
-        </section>
-    </main>
+      <!-- Product 2 -->
+      <div class="product-card">
+        <img src="images/image5.png" alt="Item 2" />
+        <div class="product-info">
+          <h3>Rigid Pipe Wrenches</h3>
+          <p class="price">$30.00</p>
+          <button class="desc-btn" onclick="toggleDescription('desc2')">View Description</button>
+          <div id="desc2" class="description-content">
+            <p>This is the detailed description of the second item.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <footer>
-        <p>&copy; 2025 letmeBurrow.com | All Rights Reserved</p>
-    </footer>
+    <!-- Right: Filters -->
+    <aside class="sidebar filters">
+      <h3>Filters</h3>
+      <div>
+        <label>Price:</label>
+        <input type="range" min="0" max="500" />
+      </div>
+      <div>
+        <label>Review:</label>
+        <select>
+          <option>Any</option>
+          <option>4 Stars & up</option>
+          <option>3 Stars & up</option>
+        </select>
+      </div>
+      <div>
+        <label><input type="checkbox" /> Show on Map</label>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2025 letmeBurrow.com | All Rights Reserved</p>
+</footer>
+
+<script>
+  // Slideshow functionality
+  let slideIndex = 0;
+  showSlides();
+  function showSlides() {
+    let slides = document.getElementsByClassName("slides");
+    for (let i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+    slideIndex++;
+    if (slideIndex > slides.length) {
+      slideIndex = 1;
+    }
+    slides[slideIndex - 1].style.display = "block";
+    setTimeout(showSlides, 3000);
+  }
+
+  // Toggle product description
+  function toggleDescription(id) {
+    let desc = document.getElementById(id);
+    desc.style.display = desc.style.display === "block" ? "none" : "block";
+  }
+</script>
 
 </body>
 </html>
