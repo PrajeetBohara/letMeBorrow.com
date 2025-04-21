@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us - letmeBurrow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div id="navbar"></div>
+  </header>
+
+  <main class="contact-page">
+    <section class="contact-section">
+      <h2>Contact Our Team</h2>
+      <p class="contact-subtext">Have a question, concern, or rental inquiry? Use the form below to reach out to us.</p>
+
+      <form class="contact-form" onsubmit="showThankYou(event)">
+        <input type="text" name="name" placeholder="Your Full Name" required />
+        <input type="email" name="email" placeholder="Your Email Address" required />
+        <input type="tel" name="phone" placeholder="Phone Number (optional)" />
+        <select name="reason" required>
+          <option value="">Select a reason for contact</option>
+          <option value="rental">Rental Inquiry</option>
+          <option value="return">Return or Issue</option>
+          <option value="partner">Partner With Us</option>
+          <option value="other">Other</option>
+        </select>
+        <textarea name="message" placeholder="Your Message" rows="6" required></textarea>
+        <input type="submit" value="Submit Request" />
+      </form>
+
+      <div id="thankYouMessage" style="display:none; margin-top: 20px; color: green; font-weight: bold;">
+        Thank you for reaching out! We'll get back to you shortly.
+      </div>
+
+      <div class="contact-info">
+        <h3>Customer Support</h3>
+        <p>Email: support@letmeburrow.com</p>
+        <p>Phone: +1 (800) 555-RENT</p>
+        <p>Hours: Mon–Fri, 9am – 6pm CST</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
+  </footer>
+
+  <script>
+    fetch('navbar.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('navbar').innerHTML = data;
+
+        const toggleBtn = document.getElementById("navToggle");
+        const navLinks = document.getElementById("navLinks");
+        if (toggleBtn && navLinks) {
+          toggleBtn.addEventListener("click", () => {
+            navLinks.classList.toggle("show");
+          });
+        }
+
+        // Add 'Contact' to the navbar if not already present
+        const nav = document.getElementById("navLinks");
+        if (nav && ![...nav.children].some(a => a.href.includes("contact.html"))) {
+          const contactLink = document.createElement("a");
+          contactLink.href = "contact.html";
+          contactLink.textContent = "Contact";
+          nav.appendChild(contactLink);
+        }
+      });
+
+    function showThankYou(event) {
+      event.preventDefault();
+      document.querySelector('.contact-form').reset();
+      document.getElementById('thankYouMessage').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
