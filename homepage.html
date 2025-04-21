@@ -1,114 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>letmeBurrow.com</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <script defer>
-        // Slideshow
-        let slideIndex = 0;
-        function showSlides() {
-            let slides = document.getElementsByClassName("slides");
-            for (let i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
-            }
-            slideIndex++;
-            if (slideIndex > slides.length) { slideIndex = 1; }
-            slides[slideIndex - 1].style.display = "block";
-            setTimeout(showSlides, 3000);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>letmeBurrow | Tool Renting Made Easy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer>
+    let slideIndex = 0;
+    function showSlides() {
+      const slides = document.getElementsByClassName("slides");
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) { slideIndex = 1; }
+      slides[slideIndex - 1].style.display = "block";
+      setTimeout(showSlides, 4000);
+    }
+    document.addEventListener("DOMContentLoaded", showSlides);
+  </script>
+  <script>
+    // Optional: Active link indicator
+    document.addEventListener("DOMContentLoaded", function () {
+      const links = document.querySelectorAll(".nav-section a");
+      const currentUrl = window.location.pathname;
+      links.forEach(link => {
+        if (link.href.includes(currentUrl)) {
+          link.classList.add("active");
         }
-        document.addEventListener("DOMContentLoaded", showSlides);
-
-        // Form Validation
-        function validateForm() {
-            const name = document.forms["contactForm"]["name"].value;
-            const email = document.forms["contactForm"]["email"].value;
-            const message = document.forms["contactForm"]["message"].value;
-            if (!name || !email || !message) {
-                alert("Please fill out all fields.");
-                return false;
-            }
-            if (!email.includes("@")) {
-                alert("Please enter a valid email address.");
-                return false;
-            }
-            alert("Form submitted successfully!");
-            return true;
-        }
-    </script>
+      });
+    });
+  </script>
 </head>
+
+<script>
+  fetch('navbar.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('navbar').innerHTML = data;
+    });
+</script>
+
 <body>
+  <header>
+    <div id="navbar"></div>
+  </header>
+  
 
-<header>
-    <div class="header-container">
-        <div class="logo-section">
-            <img src="images/logo.png" alt="Site logo" class="logo">
-            <h1>letmeBurrow</h1>
-        </div>
-        
-        <nav class="nav-section" aria-label="Main navigation">
-            <a href="homepage.html">Home</a>
-            <a href="browse.html">Browse</a>
-            <a href="categories.html">Categories</a>
-            <a href="#contact">Contact</a>
-        </nav>
-    </div>
-</header>
-
-<main>
-    <section class="slideshow-container" aria-label="Featured tools slideshow">
-        <div class="slides fade">
-            <img src="images/drill-set.png" alt="Cordless Drill">
-            <div class="slide-caption">Cordless Drill Set</div>
-        </div>
-        <div class="slides fade">
-            <img src="images/tire-inflator.png" alt="Mini Air Compressor">
-            <div class="slide-caption">Mini Air Compressor</div>
-        </div>
-        <div class="slides fade">
-            <img src="images/tool-set.png" alt="Socket Tool Set">
-            <div class="slide-caption">Socket Tool Set</div>
-        </div>
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <h2>Rent Tools. Save Money. Empower Projects.</h2>
+      <p>Thousands of tools at your fingertips, just when you need them.</p>
+      <a href="browse.html" class="hero-btn">Browse Tools</a>
     </section>
 
+    <!-- Slideshow -->
+    <section class="slideshow-container">
+      <div class="slides fade">
+        <img src="images/drill-set.png" alt="Cordless Drill">
+        <div class="slide-caption">Cordless Drill Set</div>
+      </div>
+      <div class="slides fade">
+        <img src="images/tire-inflator.png" alt="Mini Air Compressor">
+        <div class="slide-caption">Mini Air Compressor</div>
+      </div>
+      <div class="slides fade">
+        <img src="images/tool-set.png" alt="Socket Tool Set">
+        <div class="slide-caption">Socket Tool Set</div>
+      </div>
+    </section>
+
+    <!-- Featured Section -->
     <section class="featured-items">
-        <h2>Featured Items</h2>
+      <h2>Featured Rentals</h2>
+      <div class="item-grid">
         <div class="item-card">
-            <img src="images/pressure-washer.png" alt="Ryobi Pressure Washer">
-            <div class="item-info">
-                <h3>Pressure Washer</h3>
-                <p>2000 PSI electric washer for outdoor cleaning.</p>
-                <span class="price">$35/day</span>
-                <button class="buy-btn">Rent Now</button>
-            </div>
+          <img src="images/pressure-washer.png" alt="Pressure Washer">
+          <div class="item-info">
+            <h3>Pressure Washer</h3>
+            <p>High-powered 2000 PSI washer for outdoor cleanup.</p>
+            <span class="price">$35/day</span>
+            <button class="buy-btn">Rent Now</button>
+          </div>
         </div>
         <div class="item-card">
-            <img src="images/clamp-set.png" alt="Clamp Set">
-            <div class="item-info">
-                <h3>Clamp Set</h3>
-                <p>Set of metal clamps for woodworking projects.</p>
-                <span class="price">$10/day</span>
-                <button class="buy-btn">Rent Now</button>
-            </div>
+          <img src="images/lawn-mower.png" alt="Lawn Mower">
+          <div class="item-info">
+            <h3>Lawn Mower</h3>
+            <p>Electric mower perfect for small lawns and backyards.</p>
+            <span class="price">$25/day</span>
+            <button class="buy-btn">Rent Now</button>
+          </div>
         </div>
+      </div>
     </section>
 
+    <!-- Benefits Section -->
+    <section class="benefits">
+      <h2>Why letmeBurrow?</h2>
+      <ul>
+        <li>✅ Verified Owners and Tools</li>
+        <li>🔒 Secure Payments & Hassle-Free Returns</li>
+        <li>📍 Tools Near You - Fast Pickup or Delivery</li>
+      </ul>
+    </section>
+
+    <!-- Contact Section -->
     <section id="contact" class="contact-section">
-        <h2>Contact Us</h2>
-        <form name="contactForm" onsubmit="return validateForm()" aria-label="Contact form" class="contact-form">
-            <input type="text" name="name" placeholder="Your Name" aria-label="Name">
-            <input type="email" name="email" placeholder="Your Email" aria-label="Email">
-            <textarea name="message" placeholder="Your Message" aria-label="Message"></textarea>
-            <input type="submit" value="Send">
-        </form>
+      <h2>Contact Us</h2>
+      <form name="contactForm" onsubmit="return validateForm()" class="contact-form">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="message" placeholder="Your Message" required></textarea>
+        <input type="submit" value="Send">
+      </form>
     </section>
-</main>
+  </main>
 
-<footer>
-    <p>&copy; 2025 letmeBurrow.com | All Rights Reserved</p>
-</footer>
-
+  <footer>
+    <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
+  </footer>
 </body>
 </html>

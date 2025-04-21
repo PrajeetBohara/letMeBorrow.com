@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,15 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Categories - letmeBurrow</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="categories.css">
 </head>
 <body>
   <header>
     <div class="header-container">
-      <div class="logo-section">
-        <img src="images/logo.png" alt="Logo" class="logo">
+      <a href="homepage.html" class="logo-section">
+        <img src="images/logo.png" alt="letmeBurrow Logo" class="logo" />
         <h1>letmeBurrow</h1>
-      </div>
+      </a>
+      
       <nav class="nav-section">
         <a href="homepage.html">Home</a>
         <a href="browse.html">Browse</a>
@@ -23,41 +24,53 @@
   </header>
 
   <main class="category-section">
-    <h2 class="category-title">Power Tools</h2>
-    <div class="category-items">
-      <div class="category-card">
-        <img src="images/drill-set.png" alt="Drill">
-        <h4>Cordless Drill</h4>
-      </div>
-      <div class="category-card">
-        <img src="images/tool-set.png" alt="Socket Tool Set">
-        <h4>Socket Tool Set</h4>
-      </div>
-    </div>
+    <h2 class="category-title">Browse by Category</h2>
 
-    <h2 class="category-title">Garden Tools</h2>
-    <div class="category-items">
-      <div class="category-card">
-        <img src="images/pressure-washer.png" alt="Pressure Washer">
-        <h4>Pressure Washer</h4>
+    <section>
+      <h3 class="category-title">🔌 Power Tools</h3>
+      <div class="category-items">
+        <a class="category-card" href="browse.html#power">
+          <img src="images/drill-set.png" alt="Drill">
+          <h4>Cordless Drill</h4>
+        </a>
+        <a class="category-card" href="browse.html#power">
+          <img src="images/tool-set.png" alt="Socket Tool Set">
+          <h4>Socket Tool Set</h4>
+        </a>
       </div>
-      <div class="category-card">
-        <img src="images/lawn-mower.png" alt="Lawn Mower">
-        <h4>Lawn Mower</h4>
-      </div>
-    </div>
+    </section>
 
-    <h2 class="category-title">Workshop Tools</h2>
-    <div class="category-items">
-      <div class="category-card">
-        <img src="images/clamp-set.png" alt="Clamp Set">
-        <h4>Clamp Set</h4>
+    <section>
+      <h3 class="category-title">🌿 Garden Tools</h3>
+      <div class="category-items">
+        <a class="category-card" href="browse.html#garden">
+          <img src="images/pressure-washer.png" alt="Pressure Washer">
+          <h4>Pressure Washer</h4>
+        </a>
+        <a class="category-card" href="browse.html#garden">
+          <img src="images/lawn-mower.png" alt="Lawn Mower">
+          <h4>Lawn Mower</h4>
+        </a>
       </div>
-      <div class="category-card">
-        <img src="images/tire-inflator.png" alt="Air Compressor">
-        <h4>Air Compressor</h4>
+    </section>
+
+    <section>
+      <h3 class="category-title">🛠 Workshop Tools</h3>
+      <div class="category-items">
+        <a class="category-card" href="browse.html#workshop">
+          <img src="images/clamp-set.png" alt="Clamp Set">
+          <h4>Clamp Set</h4>
+        </a>
+        <a class="category-card" href="browse.html#workshop">
+          <img src="images/tire-inflator.png" alt="Air Compressor">
+          <h4>Air Compressor</h4>
+        </a>
       </div>
-    </div>
+    </section>
   </main>
+
+  <footer>
+    <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
+  </footer>
 </body>
 </html>

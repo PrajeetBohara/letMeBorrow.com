@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Browse Tools - letmeBurrow</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="browse.css">
   <script>
     function filterItems() {
       const query = document.getElementById("searchInput").value.toLowerCase();
@@ -17,13 +18,23 @@
     }
   </script>
 </head>
+
+<script>
+  fetch('navbar.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('navbar').innerHTML = data;
+    });
+</script>
+
 <body>
   <header>
     <div class="header-container">
-      <div class="logo-section">
-        <img src="images/logo.png" alt="Logo" class="logo">
+      <a href="homepage.html" class="logo-section">
+        <img src="images/logo.png" alt="letmeBurrow Logo" class="logo" />
         <h1>letmeBurrow</h1>
-      </div>
+      </a>
+      
       <nav class="nav-section">
         <a href="homepage.html">Home</a>
         <a href="browse.html">Browse</a>
@@ -31,10 +42,22 @@
       </nav>
     </div>
   </header>
+  
 
   <main class="browse-container">
+    <h2 class="browse-heading">Explore Available Tools</h2>
+
     <div class="search-bar">
       <input type="text" id="searchInput" onkeyup="filterItems()" placeholder="Search tools...">
+    </div>
+
+    <div class="filters-bar">
+      <label for="sort">Sort by:</label>
+      <select id="sort">
+        <option value="default">Default</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+      </select>
     </div>
 
     <div class="tool-grid">
@@ -82,5 +105,9 @@
       </div>
     </div>
   </main>
+
+  <footer>
+    <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
+  </footer>
 </body>
 </html>
