@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Browse Tools - letmeBurrow</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="browse.css">
   <script>
     function filterItems() {
       const query = document.getElementById("searchInput").value.toLowerCase();
@@ -19,6 +18,15 @@
     }
   </script>
 </head>
+
+<script>
+  fetch('navbar.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('navbar').innerHTML = data;
+    });
+</script>
+
 <body>
   <header>
     <div class="header-container">
@@ -27,7 +35,6 @@
         <h1>letmeBurrow</h1>
       </a>
       
-      
       <nav class="nav-section">
         <a href="homepage.html">Home</a>
         <a href="browse.html">Browse</a>
@@ -35,6 +42,7 @@
       </nav>
     </div>
   </header>
+  
 
   <main class="browse-container">
     <h2 class="browse-heading">Explore Available Tools</h2>
