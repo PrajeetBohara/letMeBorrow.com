@@ -133,7 +133,7 @@ main {
     margin-top: 20px;
     padding: 15px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    text-align: left;
+    text-align: left ;
   }
   
   .item-card img {
@@ -152,6 +152,7 @@ main {
   .price {
     color: #ff4c4c;
     font-weight: bold;
+
   }
   
   .buy-btn {
@@ -162,6 +163,7 @@ main {
     border: none;
     border-radius: 6px;
     cursor: pointer;
+
   }
   
   .buy-btn:hover {
@@ -408,5 +410,139 @@ main {
     color: #5a6dff;
     font-size: 1.1rem;
     font-weight: 500;
+  }
+  
+
+
+
+
+
+
+
+/* Navbar Toggle Button */
+.nav-toggle {
+    display: none;
+    font-size: 28px;
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+  }
+  
+  @media (max-width: 768px) {
+    .nav-toggle {
+      display: block;
+    }
+  
+    .nav-section {
+      display: none;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      padding: 1rem 0;
+    }
+  
+    .nav-section.show {
+      display: flex;
+    }
+  
+    .nav-section a {
+      margin: 10px 0;
+      padding: 0 1rem;
+    }
+  }
+  
+
+
+  /* CONTACT PAGE STYLES */
+.contact-page {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+  }
+  
+  .contact-section {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+  }
+  
+  .contact-section h2 {
+    font-size: 2rem;
+    color: #5a6dff;
+    margin-bottom: 10px;
+  }
+  
+  .contact-subtext {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 30px;
+  }
+  
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+  
+  .contact-form input[type="text"],
+  .contact-form input[type="email"],
+  .contact-form input[type="tel"],
+  .contact-form select,
+  .contact-form textarea {
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+  }
+  
+  .contact-form textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+  
+  .contact-form input[type="submit"] {
+    background-color: #5a6dff;
+    color: white;
+    font-size: 1rem;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .contact-form input[type="submit"]:hover {
+    background-color: #3f50c0;
+  }
+  
+  #thankYouMessage {
+    font-size: 1rem;
+    padding-top: 5px;
+    color: green;
+    transition: opacity 0.3s ease;
+  }
+  
+  .contact-info {
+    text-align: left;
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+  }
+  
+  .contact-info h3 {
+    color: #5a6dff;
+    margin-bottom: 10px;
+  }
+  
+  .contact-info p {
+    margin: 4px 0;
+    color: #444;
   }
   
