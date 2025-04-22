@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>letmeBurrow | Tool Renting Made Easy</title>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css" />
   <script defer>
     let slideIndex = 0;
@@ -22,18 +23,22 @@
   </script>
 </head>
 <body>
-  <header><div id="navbar"></div></header>
+  <header>
+    <div id="navbar"></div>
+  </header>
+
   <main>
     <section class="hero">
       <h2>Rent Tools. Save Money. Empower Projects.</h2>
       <p>Thousands of tools at your fingertips, just when you need them.</p>
-      <a href="browse.html" class="hero-btn">Browse Tools</a>
     </section>
+
     <section class="slideshow-container">
       <div class="slides fade"><img src="images/drill-set.png" alt="Cordless Drill"><div class="slide-caption">Cordless Drill Set</div></div>
       <div class="slides fade"><img src="images/tire-inflator.png" alt="Mini Air Compressor"><div class="slide-caption">Mini Air Compressor</div></div>
       <div class="slides fade"><img src="images/tool-set.png" alt="Socket Tool Set"><div class="slide-caption">Socket Tool Set</div></div>
     </section>
+
     <section class="featured-items">
       <h2>Featured Rentals</h2>
       <div class="item-grid">
@@ -41,6 +46,7 @@
         <div class="item-card"><img src="images/lawn-mower.png" alt="Lawn Mower"><div class="item-info"><h3>Lawn Mower</h3><p>Electric mower perfect for small lawns and backyards.</p><span class="price">$25/day</span><button class="buy-btn">Rent Now</button></div></div>
       </div>
     </section>
+
     <section class="benefits">
       <h2>Why letmeBurrow?</h2>
       <ul>
@@ -49,9 +55,12 @@
         <li>📍 Tools Near You - Fast Pickup or Delivery</li>
       </ul>
     </section>
-    
   </main>
-  <footer><p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p></footer>
+
+  <footer>
+    <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
+  </footer>
+
   <script>
     fetch('navbar.html')
       .then(res => res.text())

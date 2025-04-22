@@ -27,6 +27,11 @@ body {
     font-style: normal;
     text-align: center;
   }
+
+  button,a, .tool-card, .item-card{
+    transition: all 0.3s ease-in-out;
+  }
+
   
   /* ===================================================
      NAVIGATION BAR
@@ -152,22 +157,43 @@ main {
   .price {
     color: #ff4c4c;
     font-weight: bold;
-
+    display: in-line block;
+    margin-right: 12px;
   }
   
-  .buy-btn {
-    margin-top: 10px;
-    padding: 6px 12px;
-    background-color: #ff4c4c;
+  .buy-btn,
+  .tool-card button {
+    padding: 10px 8px;
+    background: linear-gradient(to right, #ff5858, #ff4c4c);
+    border-radius: 30px;
+    font-weight: bold;
     color: white;
+    letter-spacing: 0.5px;
     border: none;
-    border-radius: 6px;
     cursor: pointer;
-
   }
   
-  .buy-btn:hover {
-    background-color: #e03d3d;
+  .buy-btn:hover,
+  .tool-card button:hover {
+    background: linear-gradient(to right, #e54848, #d73838);
+  }
+
+  .hero{
+    background: linear-gradient(135deg, #e8f0ff, #f6f9ff);
+    padding: 60px 20px;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 40px;
+  }
+
+  .hero h2{
+    font-size: 2.5rem;
+    color: #333;
+  }
+
+  .hero p{
+    font-size: 1.2rem;
+    color: #555;
   }
   
   /* ===================================================
@@ -312,9 +338,11 @@ main {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   
-  .tool-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  .tool-card:hover,
+  .item-card:hover,
+  .category-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
   }
   
   .tool-card img {

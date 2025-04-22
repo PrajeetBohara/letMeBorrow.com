@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,32 +6,12 @@
   <title>Browse Tools - letmeBurrow</title>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css">
-  <script>
-    function filterItems() {
-      const query = document.getElementById("searchInput").value.toLowerCase();
-      const cards = document.querySelectorAll(".tool-card");
-      cards.forEach(card => {
-        const text = card.innerText.toLowerCase();
-        card.style.display = text.includes(query) ? "block" : "none";
-      });
-    }
-  </script>
 </head>
-
-<script>
-  fetch('navbar.html')
-    .then(res => res.text())
-    .then(data => {
-      document.getElementById('navbar').innerHTML = data;
-    });
-</script>
 
 <body>
   <header>
     <div id="navbar"></div>
   </header>
-  
-  
 
   <main class="browse-container">
     <h2 class="browse-heading">Explore Available Tools</h2>
@@ -44,50 +22,50 @@
 
     <div class="filters-bar">
       <label for="sort">Sort by:</label>
-      <select id="sort">
+      <select id="sort" onchange="sortItems()">
         <option value="default">Default</option>
         <option value="price-asc">Price: Low to High</option>
         <option value="price-desc">Price: High to Low</option>
       </select>
     </div>
 
-    <div class="tool-grid">
-      <div class="tool-card">
+    <div class="tool-grid" id="toolGrid">
+      <div class="tool-card" id="power">
         <img src="images/drill-set.png" alt="Cordless Drill">
         <h3>Cordless Drill</h3>
         <p>Compact and powerful drill set</p>
         <div class="price">$35/day</div>
         <button>Rent Now</button>
       </div>
-      <div class="tool-card">
+      <div class="tool-card" id="workshop">
         <img src="images/tire-inflator.png" alt="Air Compressor">
         <h3>Air Compressor</h3>
         <p>Portable air compressor with attachments</p>
         <div class="price">$35/day</div>
         <button>Rent Now</button>
       </div>
-      <div class="tool-card">
+      <div class="tool-card" id="power">
         <img src="images/tool-set.png" alt="Socket Tool Set">
         <h3>Socket Tool Set</h3>
         <p>Complete socket and wrench set</p>
         <div class="price">$42/day</div>
         <button>Rent Now</button>
       </div>
-      <div class="tool-card">
+      <div class="tool-card" id="garden">
         <img src="images/pressure-washer.png" alt="Pressure Washer">
         <h3>Pressure Washer</h3>
         <p>2000 PSI electric washer</p>
         <div class="price">$30/day</div>
         <button>Rent Now</button>
       </div>
-      <div class="tool-card">
+      <div class="tool-card" id="workshop">
         <img src="images/clamp-set.png" alt="Clamp Set">
         <h3>Clamp Set</h3>
         <p>Heavy-duty clamps for woodworking</p>
         <div class="price">$10/day</div>
         <button>Rent Now</button>
       </div>
-      <div class="tool-card">
+      <div class="tool-card" id="garden">
         <img src="images/lawn-mower.png" alt="Lawn Mower">
         <h3>Lawn Mower</h3>
         <p>Electric mower ideal for small lawns</p>
@@ -102,12 +80,42 @@
   </footer>
 
   <script>
+    // Load navbar
     fetch('navbar.html')
       .then(res => res.text())
       .then(data => {
         document.getElementById('navbar').innerHTML = data;
       });
+
+    // Filter items
+    function filterItems() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const cards = document.querySelectorAll(".tool-card");
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(query) ? "block" : "none";
+      });
+    }
+
+    // Sort items
+    function sortItems() {
+      const sortValue = document.getElementById("sort").value;
+      const grid = document.getElementById("toolGrid");
+      const cards = Array.from(grid.getElementsByClassName("tool-card"));
+
+      if (sortValue === "default") {
+        return; // No sorting
+      }
+
+      cards.sort((a, b) => {
+        const priceA = parseFloat(a.querySelector(".price").innerText.replace("$", ""));
+        const priceB = parseFloat(b.querySelector(".price").innerText.replace("$", ""));
+        return sortValue === "price-asc" ? priceA - priceB : priceB - priceA;
+      });
+
+      // Re-append sorted cards
+      cards.forEach(card => grid.appendChild(card));
+    }
   </script>
-  
 </body>
 </html>
