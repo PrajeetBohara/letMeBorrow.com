@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "name": "Cordless Drill",
+    "description": "Compact and powerful drill set",
+    "price_per_day": 35,
+    "image": "images/drill-set.png"
+  },
+  {
+    "id": 2,
+    "name": "Air Compressor",
+    "description": "Portable air compressor with attachments",
+    "price_per_day": 35,
+    "image": "images/tire-inflator.png"
+  },
+  {
+    "id": 3,
+    "name": "Socket Tool Set",
+    "description": "Complete socket and wrench set",
+    "price_per_day": 42,
+    "image": "images/tool-set.png"
+  },
+  {
+    "id": 4,
+    "name": "Pressure Washer",
+    "description": "2000 PSI electric washer",
+    "price_per_day": 30,
+    "image": "images/pressure-washer.png"
+  },
+  {
+    "id": 5,
+    "name": "Clamp Set",
+    "description": "Heavy-duty clamps for woodworking",
+    "price_per_day": 10,
+    "image": "images/clamp-set.png"
+  },
+  {
+    "id": 6,
+    "name": "Lawn Mower",
+    "description": "Electric mower ideal for small lawns",
+    "price_per_day": 25,
+    "image": "images/lawn-mower.png"
+  }
+]
