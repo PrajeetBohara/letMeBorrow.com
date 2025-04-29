@@ -8,20 +8,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="icon" type="images/png" href="images/logo.png">
   <link rel="stylesheet" href="style.css" />
-  <script defer>
-    let slideIndex = 0;
-    function showSlides() {
-      const slides = document.getElementsByClassName("slides");
-      for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-      }
-      slideIndex++;
-      if (slideIndex > slides.length) { slideIndex = 1; }
-      slides[slideIndex - 1].style.display = "block";
-      setTimeout(showSlides, 4000);
-    }
-    document.addEventListener("DOMContentLoaded", showSlides);
-  </script>
 </head>
 <body>
   <header>
@@ -34,17 +20,14 @@
       <p>Thousands of tools at your fingertips, just when you need them.</p>
     </section>
 
-    <section class="slideshow-container">
-      <div class="slides fade"><img src="images/drill-set.png" alt="Cordless Drill"><div class="slide-caption">Cordless Drill Set</div></div>
-      <div class="slides fade"><img src="images/tire-inflator.png" alt="Mini Air Compressor"><div class="slide-caption">Mini Air Compressor</div></div>
-      <div class="slides fade"><img src="images/tool-set.png" alt="Socket Tool Set"><div class="slide-caption">Socket Tool Set</div></div>
+    <section id="slideshowContainer" class="slideshow-container">
+      <!-- Dynamic slideshow -->
     </section>
 
     <section class="featured-items">
       <h2>Featured Rentals</h2>
-      <div class="item-grid">
-        <div class="item-card"><img src="images/pressure-washer.png" alt="Pressure Washer"><div class="item-info"><h3>Pressure Washer</h3><p>High-powered 2000 PSI washer for outdoor cleanup.</p><span class="price">$35/day</span><button class="buy-btn">Rent Now</button></div></div>
-        <div class="item-card"><img src="images/lawn-mower.png" alt="Lawn Mower"><div class="item-info"><h3>Lawn Mower</h3><p>Electric mower perfect for small lawns and backyards.</p><span class="price">$25/day</span><button class="buy-btn">Rent Now</button></div></div>
+      <div id="featuredTools" class="item-grid">
+        <!-- Featured rentals load dynamically -->
       </div>
     </section>
 
@@ -62,7 +45,29 @@
     <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
   </footer>
 
+  <!-- ✅ Rent Modal -->
+  <div id="rentModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Rent Tool</h2>
+      <form id="rentalForm" onsubmit="submitRental(event)">
+        <input type="hidden" id="toolId" name="tool_id">
+        <input type="text" id="renterName" name="renter_name" placeholder="Your Name" required>
+        <input type="email" id="renterEmail" name="renter_email" placeholder="Your Email" required>
+        <input type="number" id="rentalDuration" name="rental_duration" placeholder="Days to Rent" required min="1">
+        <input type="submit" value="Confirm Rental">
+      </form>
+    </div>
+  </div>
+
+  <!-- Seedrandom Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
+
   <script>
+    let slideIndex = 0;
+    let slideTimer;
+
+    // Load navbar
     fetch('navbar.html')
       .then(res => res.text())
       .then(data => {
@@ -75,6 +80,110 @@
           });
         }
       });
+
+    // Load slideshow and featured rentals
+    document.addEventListener("DOMContentLoaded", function() {
+      fetch('http://127.0.0.1:5000/get_tools')
+        .then(response => response.json())
+        .then(tools => {
+          const today = new Date();
+          const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
+          Math.seedrandom(seed);
+
+          const shuffled = tools.slice().sort(() => 0.5 - Math.random());
+
+          // Load Featured Rentals (first 2)
+          const featuredContainer = document.getElementById('featuredTools');
+          featuredContainer.innerHTML = '';
+          shuffled.slice(0, 2).forEach(tool => {
+            const card = document.createElement('div');
+            card.className = 'item-card';
+            card.innerHTML = `
+              <img src="${tool.image}" alt="${tool.name}">
+              <div class="item-info">
+                <h3>${tool.name}</h3>
+                <p>${tool.description}</p>
+                <span class="price">$${tool.price_per_day}/day</span>
+                <button class="buy-btn" onclick="openModal(${tool.id})">Rent Now</button>
+              </div>
+            `;
+            featuredContainer.appendChild(card);
+          });
+
+          // Load all tools for Slideshow
+          const slideshowContainer = document.getElementById('slideshowContainer');
+          slideshowContainer.innerHTML = '';
+          tools.forEach(tool => {
+            const slide = document.createElement('div');
+            slide.className = 'slides fade';
+            slide.innerHTML = `
+              <img src="${tool.image}" alt="${tool.name}">
+              <div class="slide-caption">${tool.name}</div>
+            `;
+            slideshowContainer.appendChild(slide);
+          });
+
+          showSlides();
+        })
+        .catch(error => {
+          console.error('Error loading tools:', error);
+        });
+    });
+
+    function showSlides() {
+      const slides = document.getElementsByClassName("slides");
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) { slideIndex = 1; }
+      if (slides.length > 0) {
+        slides[slideIndex-1].style.display = "block";
+      }
+      slideTimer = setTimeout(showSlides, 4000);
+    }
+
+    function openModal(toolId) {
+      document.getElementById("rentModal").style.display = "block";
+      document.getElementById("toolId").value = toolId;
+    }
+
+    function closeModal() {
+      document.getElementById("rentModal").style.display = "none";
+    }
+
+    function submitRental(event) {
+      event.preventDefault();
+
+      const toolId = document.getElementById('toolId').value;
+      const renterName = document.getElementById('renterName').value;
+      const renterEmail = document.getElementById('renterEmail').value;
+      const rentalDuration = document.getElementById('rentalDuration').value;
+
+      fetch('http://127.0.0.1:5000/save_rental', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          tool_id: toolId,
+          renter_name: renterName,
+          renter_email: renterEmail,
+          rental_duration: rentalDuration
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert(data.message);
+        closeModal();
+        document.getElementById('rentalForm').reset();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to submit rental.');
+      });
+    }
   </script>
+
 </body>
 </html>

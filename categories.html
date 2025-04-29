@@ -1,63 +1,24 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Categories - letmeBurrow</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Categories - let me borrow</title>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="icon" type="images/png" href="images/logo.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
     <div id="navbar"></div>
   </header>
-  
 
-  <main class="category-section">
-    <h2 class="category-title">Browse by Category</h2>
-
-    <section>
-      <h3 class="category-title">🔌 Power Tools</h3>
-      <div class="category-items">
-        <a class="category-card" href="browse.html#power">
-          <img src="images/drill-set.png" alt="Drill">
-          <h4>Cordless Drill</h4>
-        </a>
-        <a class="category-card" href="browse.html#power">
-          <img src="images/tool-set.png" alt="Socket Tool Set">
-          <h4>Socket Tool Set</h4>
-        </a>
-      </div>
-    </section>
-
-    <section>
-      <h3 class="category-title">🌿 Garden Tools</h3>
-      <div class="category-items">
-        <a class="category-card" href="browse.html#garden">
-          <img src="images/pressure-washer.png" alt="Pressure Washer">
-          <h4>Pressure Washer</h4>
-        </a>
-        <a class="category-card" href="browse.html#garden">
-          <img src="images/lawn-mower.png" alt="Lawn Mower">
-          <h4>Lawn Mower</h4>
-        </a>
-      </div>
-    </section>
-
-    <section>
-      <h3 class="category-title">🛠 Workshop Tools</h3>
-      <div class="category-items">
-        <a class="category-card" href="browse.html#workshop">
-          <img src="images/clamp-set.png" alt="Clamp Set">
-          <h4>Clamp Set</h4>
-        </a>
-        <a class="category-card" href="browse.html#workshop">
-          <img src="images/tire-inflator.png" alt="Air Compressor">
-          <h4>Air Compressor</h4>
-        </a>
+  <main>
+    <section class="category-section">
+      <h2 class="browse-heading">Browse by Categories</h2>
+      <div id="categoryContainer">
+        <!-- Categories will load dynamically here -->
       </div>
     </section>
   </main>
@@ -65,13 +26,136 @@
   <footer>
     <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
   </footer>
+
+  <!-- ✅ Rent Modal -->
+  <div id="rentModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 style="margin-top: 50px;">Rent Tool</h2>
+      <form id="rentalForm" onsubmit="submitRental(event)">
+        <input type="hidden" id="toolId" name="tool_id">
+        <input type="text" id="renterName" name="renter_name" placeholder="Your Name" required>
+        <input type="email" id="renterEmail" name="renter_email" placeholder="Your Email" required>
+        <input type="number" id="rentalDuration" name="rental_duration" placeholder="Days to Rent" required min="1">
+        <input type="submit" value="Confirm Rental">
+      </form>
+    </div>
+  </div>
+
+  <!-- ✅ Script Section -->
   <script>
+    // Load navbar dynamically
     fetch('navbar.html')
       .then(res => res.text())
       .then(data => {
         document.getElementById('navbar').innerHTML = data;
+        const toggleBtn = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        if (toggleBtn && navLinks) {
+          toggleBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+          });
+        }
       });
+
+    // Load and display tools grouped by categories
+    document.addEventListener("DOMContentLoaded", function() {
+      fetch('http://127.0.0.1:5000/get_tools')
+        .then(response => response.json())
+        .then(tools => {
+          const categories = {};
+
+          // Group tools by their category
+          tools.forEach(tool => {
+            const type = tool.category || "Uncategorized";
+            if (!categories[type]) {
+              categories[type] = [];
+            }
+            categories[type].push(tool);
+          });
+
+          const container = document.getElementById('categoryContainer');
+          container.innerHTML = '';
+
+          for (let category in categories) {
+            const section = document.createElement('div');
+            section.className = 'category-section';
+            section.innerHTML = `<h2 class="category-title">${category}</h2>`;
+
+            const items = document.createElement('div');
+            items.className = 'category-items';
+
+            categories[category].forEach(tool => {
+              const card = document.createElement('div');
+              card.className = 'category-card';
+              card.innerHTML = `
+                <img src="${tool.image}" alt="${tool.name}">
+                <h4>${tool.name}</h4>
+                <p class="price">$${tool.price_per_day}/day</p>
+                <button class="buy-btn" onclick="openModal(${tool.id})">Rent Now</button>
+              `;
+              items.appendChild(card);
+            });
+
+            section.appendChild(items);
+            container.appendChild(section);
+          }
+        })
+        .catch(error => {
+          console.error('Error loading categories:', error);
+        });
+    });
+
+    // Modal functions
+    function openModal(toolId) {
+      document.getElementById("rentModal").style.display = "block";
+      document.getElementById("toolId").value = toolId;
+    }
+
+    function closeModal() {
+      document.getElementById("rentModal").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById("rentModal");
+      if (event.target == modal) {
+        closeModal();
+      }
+    }
+
+    // Submit rental form
+    function submitRental(event) {
+      event.preventDefault();
+
+      const toolId = document.getElementById('toolId').value;
+      const renterName = document.getElementById('renterName').value;
+      const renterEmail = document.getElementById('renterEmail').value;
+      const rentalDuration = document.getElementById('rentalDuration').value;
+
+      fetch('http://127.0.0.1:5000/save_rental', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          tool_id: toolId,
+          renter_name: renterName,
+          renter_email: renterEmail,
+          rental_duration: rentalDuration
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert(data.message);
+        closeModal();
+        document.getElementById('rentalForm').reset();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to submit rental.');
+      });
+    }
   </script>
-  
+
 </body>
 </html>

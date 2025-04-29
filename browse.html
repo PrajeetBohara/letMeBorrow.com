@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Browse Tools - letmeBurrow</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="images/png" href="images/logo.png">
 </head>
 <body>
 
@@ -24,34 +25,40 @@
 </footer>
 
 <!-- Modal for Renting -->
-<div id="rentModal" class="modal" style="display:none;">
+<div id="rentModal" class="modal" style="display: none;">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Rent Tool</h2>
+        <h2 style="margin-top: 50px;">Rent Tool</h2>
         <form id="rentalForm" onsubmit="submitRental(event)">
             <input type="hidden" id="toolId" name="tool_id">
             <input type="text" id="renterName" name="renter_name" placeholder="Your Name" required>
             <input type="email" id="renterEmail" name="renter_email" placeholder="Your Email" required>
+            <input type="number" id="rentalDuration" name="rental_duration" placeholder="Days to Rent" required min="1">
             <input type="submit" value="Confirm Rental">
         </form>
     </div>
 </div>
 
+
+
+
+
 <script>
-// Load navbar
+// Load navbar dynamically
 fetch('navbar.html')
     .then(res => res.text())
     .then(data => {
         document.getElementById('navbar').innerHTML = data;
     });
 
-// Fetch and display tools dynamically from backend
+// Fetch and display tools dynamically from backend (Python Flask)
 document.addEventListener("DOMContentLoaded", function() {
     fetch('http://127.0.0.1:5000/get_tools')
         .then(response => response.json())
         .then(tools => {
             const grid = document.getElementById('toolGrid');
-            grid.innerHTML = '';
+            grid.innerHTML = '';  // Clear the grid before adding tools
+
             tools.forEach(tool => {
                 const card = document.createElement('div');
                 card.className = 'tool-card';
@@ -65,19 +72,25 @@ document.addEventListener("DOMContentLoaded", function() {
                 grid.appendChild(card);
             });
         })
-        .catch(error => console.error('Error loading tools:', error));
+        .catch(error => {
+            console.error('Error loading tools:', error);
+        });
 });
 
 // Modal Logic
+// Open the modal when "Rent Now" is clicked
 function openModal(toolId) {
+    console.log('Opening modal for tool ID:', toolId);  // Debugging log
     document.getElementById("rentModal").style.display = "block";
     document.getElementById("toolId").value = toolId;
 }
 
+// Close the modal when close button is clicked
 function closeModal() {
     document.getElementById("rentModal").style.display = "none";
 }
 
+// Close the modal when clicking outside the modal
 window.onclick = function(event) {
     const modal = document.getElementById("rentModal");
     if (event.target == modal) {
@@ -85,13 +98,14 @@ window.onclick = function(event) {
     }
 }
 
-// Submit Rental Form to Python Backend
+// Submit the rental form to backend (Flask)
 function submitRental(event) {
     event.preventDefault();
 
     const toolId = document.getElementById('toolId').value;
     const renterName = document.getElementById('renterName').value;
     const renterEmail = document.getElementById('renterEmail').value;
+    const rentalDuration = document.getElementById('rentalDuration').value;
 
     fetch('http://127.0.0.1:5000/save_rental', {
         method: 'POST',
@@ -101,7 +115,8 @@ function submitRental(event) {
         body: JSON.stringify({
             tool_id: toolId,
             renter_name: renterName,
-            renter_email: renterEmail
+            renter_email: renterEmail,
+            rental_duration: rentalDuration
         })
     })
     .then(response => response.json())
@@ -115,6 +130,7 @@ function submitRental(event) {
         alert('Failed to submit rental.');
     });
 }
+
 </script>
 
 </body>
