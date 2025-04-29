@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Categories - let me borrow</title>
+  <title>Home - let me borrow</title>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="icon" type="images/png" href="images/logo.png">
@@ -15,11 +15,29 @@
   </header>
 
   <main>
-    <section class="category-section">
-      <h2 class="browse-heading">Browse by Categories</h2>
-      <div id="categoryContainer">
-        <!-- Categories will load dynamically here -->
+    <section class="hero">
+      <h2>Rent Tools. Save Money. Empower Projects.</h2>
+      <p>Thousands of tools at your fingertips, just when you need them.</p>
+    </section>
+
+    <section id="slideshowContainer" class="slideshow-container">
+      <!-- Dynamic slideshow -->
+    </section>
+
+    <section class="featured-items">
+      <h2>Featured Rentals</h2>
+      <div id="featuredTools" class="item-grid">
+        <!-- Featured rentals load dynamically -->
       </div>
+    </section>
+
+    <section class="benefits">
+      <h2>Why letmeBurrow?</h2>
+      <ul>
+        <li>✅ Verified Owners and Tools</li>
+        <li>🔒 Secure Payments & Hassle-Free Returns</li>
+        <li>📍 Tools Near You - Fast Pickup or Delivery</li>
+      </ul>
     </section>
   </main>
 
@@ -28,10 +46,10 @@
   </footer>
 
   <!-- ✅ Rent Modal -->
-  <div id="rentModal" class="modal" style="display:none;">
+  <div id="rentModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
-      <h2 style="margin-top: 50px;">Rent Tool</h2>
+      <h2>Rent Tool</h2>
       <form id="rentalForm" onsubmit="submitRental(event)">
         <input type="hidden" id="toolId" name="tool_id">
         <input type="text" id="renterName" name="renter_name" placeholder="Your Name" required>
@@ -42,9 +60,14 @@
     </div>
   </div>
 
-  <!-- ✅ Script Section -->
+  <!-- Seedrandom Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
+
   <script>
-    // Load navbar dynamically
+    let slideIndex = 0;
+    let slideTimer;
+
+    // Load navbar
     fetch('navbar.html')
       .then(res => res.text())
       .then(data => {
@@ -58,55 +81,68 @@
         }
       });
 
-    // Load and display tools grouped by categories
+    // Load slideshow and featured rentals
     document.addEventListener("DOMContentLoaded", function() {
       fetch('http://127.0.0.1:5000/get_tools')
         .then(response => response.json())
         .then(tools => {
-          const categories = {};
+          const today = new Date();
+          const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
+          Math.seedrandom(seed);
 
-          // Group tools by their category
-          tools.forEach(tool => {
-            const type = tool.category || "Uncategorized";
-            if (!categories[type]) {
-              categories[type] = [];
-            }
-            categories[type].push(tool);
+          const shuffled = tools.slice().sort(() => 0.5 - Math.random());
+
+          // Load Featured Rentals (first 2)
+          const featuredContainer = document.getElementById('featuredTools');
+          featuredContainer.innerHTML = '';
+          shuffled.slice(0, 2).forEach(tool => {
+            const card = document.createElement('div');
+            card.className = 'item-card';
+            card.innerHTML = `
+              <img src="${tool.image}" alt="${tool.name}">
+              <div class="item-info">
+                <h3>${tool.name}</h3>
+                <p>${tool.description}</p>
+                <span class="price">$${tool.price_per_day}/day</span>
+                <button class="buy-btn" onclick="openModal(${tool.id})">Rent Now</button>
+              </div>
+            `;
+            featuredContainer.appendChild(card);
           });
 
-          const container = document.getElementById('categoryContainer');
-          container.innerHTML = '';
+          // Load all tools for Slideshow
+          const slideshowContainer = document.getElementById('slideshowContainer');
+          slideshowContainer.innerHTML = '';
+          tools.forEach(tool => {
+            const slide = document.createElement('div');
+            slide.className = 'slides fade';
+            slide.innerHTML = `
+              <img src="${tool.image}" alt="${tool.name}">
+              <div class="slide-caption">${tool.name}</div>
+            `;
+            slideshowContainer.appendChild(slide);
+          });
 
-          for (let category in categories) {
-            const section = document.createElement('div');
-            section.className = 'category-section';
-            section.innerHTML = `<h2 class="category-title">${category}</h2>`;
-
-            const items = document.createElement('div');
-            items.className = 'category-items';
-
-            categories[category].forEach(tool => {
-              const card = document.createElement('div');
-              card.className = 'category-card';
-              card.innerHTML = `
-                <img src="${tool.image}" alt="${tool.name}">
-                <h4>${tool.name}</h4>
-                <p class="price">$${tool.price_per_day}/day</p>
-                <button class="buy-btn" onclick="openModal(${tool.id})">Rent Now</button>
-              `;
-              items.appendChild(card);
-            });
-
-            section.appendChild(items);
-            container.appendChild(section);
-          }
+          showSlides();
         })
         .catch(error => {
-          console.error('Error loading categories:', error);
+          console.error('Error loading tools:', error);
         });
     });
 
-    // Modal functions
+    function showSlides() {
+      const slides = document.getElementsByClassName("slides");
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) { slideIndex = 1; }
+      if (slides.length > 0) {
+        slides[slideIndex-1].style.display = "block";
+      }
+      slideTimer = setTimeout(showSlides, 4000);
+    }
+
     function openModal(toolId) {
       document.getElementById("rentModal").style.display = "block";
       document.getElementById("toolId").value = toolId;
@@ -116,14 +152,6 @@
       document.getElementById("rentModal").style.display = "none";
     }
 
-    window.onclick = function(event) {
-      const modal = document.getElementById("rentModal");
-      if (event.target == modal) {
-        closeModal();
-      }
-    }
-
-    // Submit rental form
     function submitRental(event) {
       event.preventDefault();
 

@@ -1,0 +1,170 @@
+[
+  {
+    "id": 1,
+    "name": "Cordless Drill",
+    "description": "Compact and powerful drill set",
+    "price_per_day": 35,
+    "image": "images/cordless-drill.png",
+    "category": "Power Tools"
+  },
+  {
+    "id": 2,
+    "name": "Air Compressor",
+    "description": "Portable air compressor with attachments",
+    "price_per_day": 35,
+    "image": "images/air-compressor.png",
+    "category": "Workshop Tools"
+  },
+  {
+    "id": 3,
+    "name": "Socket Tool Set",
+    "description": "Complete socket and wrench set",
+    "price_per_day": 42,
+    "image": "images/tool-set.png",
+    "category": "Workshop Tools"
+  },
+  {
+    "id": 4,
+    "name": "Pressure Washer",
+    "description": "2000 PSI electric washer",
+    "price_per_day": 30,
+    "image": "images/pressure-washer.png",
+    "category": "Garden Tools"
+  },
+  {
+    "id": 5,
+    "name": "Clamp Set",
+    "description": "Heavy-duty clamps for woodworking",
+    "price_per_day": 10,
+    "image": "images/clamp-set.png",
+    "category": "Workshop Tools"
+  },
+  {
+    "id": 6,
+    "name": "Lawn Mower",
+    "description": "Electric mower ideal for small lawns",
+    "price_per_day": 25,
+    "image": "images/lawn-mower.png",
+    "category": "Garden Tools"
+  },
+  {
+    "id": 7,
+    "name": "Circular Saw",
+    "description": "High-performance electric saw for wood cutting",
+    "price_per_day": 28,
+    "image": "images/circular-saw.png",
+    "category": "Power Tools"
+  },
+  {
+    "id": 8,
+    "name": "Chainsaw",
+    "description": "Gas-powered chainsaw for heavy-duty cutting",
+    "price_per_day": 40,
+    "image": "images/chainsaw.png",
+    "category": "Garden Tools"
+  },
+  {
+    "id": 9,
+    "name": "Electric Sander",
+    "description": "Palm sander for smooth wood finishing",
+    "price_per_day": 22,
+    "image": "images/electric-sander.png",
+    "category": "Workshop Tools"
+  },
+  {
+    "id": 10,
+    "name": "Tile Cutter",
+    "description": "Manual tile cutter perfect for renovation work",
+    "price_per_day": 18,
+    "image": "images/tile-cutter.png",
+    "category": "Construction Tools"
+  },
+  {
+    "id": 11,
+    "name": "Post Hole Digger",
+    "description": "Heavy-duty post hole digger for fencing projects",
+    "price_per_day": 32,
+    "image": "images/post-hole-digger.png",
+    "category": "Garden Tools"
+  },
+  {
+    "id": 12,
+    "name": "Paint Sprayer",
+    "description": "Professional paint sprayer for fast painting jobs",
+    "price_per_day": 35,
+    "image": "images/paint-sprayer.png",
+    "category": "Workshop Tools"
+  },
+  {
+    "id": 13,
+    "name": "Jackhammer",
+    "description": "Industrial jackhammer for breaking concrete",
+    "price_per_day": 50,
+    "image": "images/jackhammer.png",
+    "category": "Construction Tools"
+  },
+  {
+    "id": 14,
+    "name": "Concrete Mixer",
+    "description": "Portable electric concrete mixer for construction",
+    "price_per_day": 55,
+    "image": "images/concrete-mixer.png",
+    "category": "Construction Tools"
+  },
+  {
+    "id": 15,
+    "name": "Leaf Blower",
+    "description": "Electric leaf blower for quick lawn cleanup",
+    "price_per_day": 20,
+    "image": "images/leaf-blower.png",
+    "category": "Garden Tools"
+  },
+  {
+    "id": 16,
+    "name": "Pressure Sprayer",
+    "description": "Backpack pressure sprayer for garden care",
+    "price_per_day": 18,
+    "image": "images/pressure-sprayer.png",
+    "category": "Garden Tools"
+  },
+  {
+    "id": 17,
+    "name": "Multi-tool Oscillating Cutter",
+    "description": "Versatile cutter for sanding, scraping, cutting",
+    "price_per_day": 25,
+    "image": "images/oscillating-cutter.png",
+    "category": "Workshop Tools"
+  },
+  {
+    "id": 18,
+    "name": "Rotary Hammer Drill",
+    "description": "Heavy-duty rotary hammer drill for masonry work",
+    "price_per_day": 38,
+    "image": "images/rotary-hammer.png",
+    "category": "Power Tools"
+  },
+  {
+    "id": 19,
+    "name": "Electric Hedge Trimmer",
+    "description": "Corded electric hedge trimmer for garden care",
+    "price_per_day": 24,
+    "image": "images/hedge-trimmer.png",
+    "category": "Garden Tools"
+  },
+  {
+    "id": 20,
+    "name": "Wet/Dry Vacuum",
+    "description": "Industrial wet/dry vacuum cleaner",
+    "price_per_day": 30,
+    "image": "images/wet-dry-vacuum.png",
+    "category": "Workshop Tools"
+  },
+  {
+    "id": 21,
+    "name": "Laser Level",
+    "description": "Precision laser level tool for alignment",
+    "price_per_day": 27,
+    "image": "images/laser-level.png",
+    "category": "Construction Tools"
+  }
+]
