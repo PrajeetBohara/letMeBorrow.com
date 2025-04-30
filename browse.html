@@ -1,102 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Browse Tools - letmeBurrow</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="images/png" href="images/logo.png">
+  <meta charset="UTF-8">
+  <title>Browse Tools - letmeBurrow</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="images/png" href="images/logo.png">
 </head>
 <body>
 
 <header>
-    <!-- Navbar will be loaded here dynamically -->
-    <div id="navbar"></div>
+  <!-- Navbar will be loaded here dynamically -->
+  <div id="navbar"></div>
 </header>
 
 <main class="browse-container">
-    <h2 class="browse-heading">Explore Available Tools</h2>
-    <!-- Container for tool cards loaded from backend -->
-    <div class="tool-grid" id="toolGrid"></div>
+  <h2 class="browse-heading">Explore Available Tools</h2>
+  <!-- Container for tool cards loaded from backend -->
+  <div class="tool-grid" id="toolGrid"></div>
 </main>
 
 <footer>
-    <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
+  <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
 </footer>
 
 <!-- Rental Modal -->
 <div id="rentModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2 style="margin-top: 50px;">Rent Tool</h2>
-        <form id="rentalForm" onsubmit="submitRental(event)">
-            <input type="hidden" id="toolId" name="tool_id">
-            <input type="text" id="renterName" name="renter_name" placeholder="Your Name" required>
-            <input type="email" id="renterEmail" name="renter_email" placeholder="Your Email" required>
-            <input type="number" id="rentalDuration" name="rental_duration" placeholder="Days to Rent" required min="1">
-            <input type="submit" value="Confirm Rental">
-        </form>
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2 style="margin-top: 50px;">Rent Tool</h2>
+    <form id="rentalForm" onsubmit="submitRental(event)">
+      <input type="hidden" id="toolId" name="tool_id">
+      <input type="text" id="renterName" name="renter_name" placeholder="Your Name" required>
+      <input type="email" id="renterEmail" name="renter_email" placeholder="Your Email" required>
+      <input type="number" id="rentalDuration" name="rental_duration" placeholder="Days to Rent" required min="1">
+      <input type="submit" value="Confirm Rental">
+    </form>
 
-        <p id="rentalConfirmation" class="thank-you-message" style="display: none;">
-            ✅ Rental saved successfully!
-            <br />
-            <button onclick="hideRentalConfirmation()" class="thank-you-button">OK</button>
-          </p>
-          
-    </div>
+    <p id="rentalConfirmation" class="thank-you-message" style="display: none;">
+      ✅ Rental saved successfully!
+      <br />
+      <button onclick="hideRentalConfirmation()" class="thank-you-button">OK</button>
+    </p>
+  </div>
 </div>
 
 <script>
 // Load the navbar content from navbar.html
 fetch('navbar.html')
-    .then(res => res.text())
-    .then(data => {
-        document.getElementById('navbar').innerHTML = data;
-    });
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById('navbar').innerHTML = data;
+
+    setTimeout(() => {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const loginLink = document.getElementById('loginLink');
+      const logoutLink = document.getElementById('logoutLink');
+      const userNameSpan = document.getElementById('userName');
+      if (user) {
+        loginLink.style.display = 'none';
+        logoutLink.style.display = 'inline-block';
+        userNameSpan.textContent = user.name;
+      } else {
+        loginLink.style.display = 'inline-block';
+        logoutLink.style.display = 'none';
+      }
+
+      const toggleBtn = document.getElementById("navToggle");
+      const navLinks = document.getElementById("navLinks");
+      if (toggleBtn && navLinks) {
+        toggleBtn.addEventListener("click", () => {
+          navLinks.classList.toggle("show");
+        });
+      }
+    }, 50);
+  });
 
 // Fetch tools from backend and render them on the page
 document.addEventListener("DOMContentLoaded", function() {
-    fetch('http://127.0.0.1:5000/get_tools')
-        .then(response => response.json())
-        .then(tools => {
-            const grid = document.getElementById('toolGrid');
-            grid.innerHTML = ''; // Clear existing content
+  fetch('http://127.0.0.1:5000/get_tools')
+    .then(response => response.json())
+    .then(tools => {
+      const grid = document.getElementById('toolGrid');
+      grid.innerHTML = ''; // Clear existing content
 
-            // Create and append tool cards
-            tools.forEach(tool => {
-                const card = document.createElement('div');
-                card.className = 'tool-card';
-                card.innerHTML = `
-                    <img src="${tool.image}" alt="${tool.name}">
-                    <h3>${tool.name}</h3>
-                    <p>${tool.description}</p>
-                    <div class="price">$${tool.price_per_day}/day</div>
-                    <button onclick="openModal(${tool.id})">Rent Now</button>
-                `;
-                grid.appendChild(card);
-            });
-        })
-        .catch(error => {
-            console.error('Error loading tools:', error);
-        });
+      // Create and append tool cards
+      tools.forEach(tool => {
+        const card = document.createElement('div');
+        card.className = 'tool-card';
+        card.innerHTML = `
+          <img src="${tool.image}" alt="${tool.name}">
+          <h3>${tool.name}</h3>
+          <p>${tool.description}</p>
+          <div class="price">$${tool.price_per_day}/day</div>
+          <button onclick="openModal(${tool.id})">Rent Now</button>
+        `;
+        grid.appendChild(card);
+      });
+    })
+    .catch(error => {
+      console.error('Error loading tools:', error);
+    });
 });
 
 // Open rental modal and set tool ID
 function openModal(toolId) {
-    document.getElementById("rentModal").style.display = "block";
-    document.getElementById("toolId").value = toolId;
+  document.getElementById("rentModal").style.display = "block";
+  document.getElementById("toolId").value = toolId;
 }
 
 // Close rental modal
 function closeModal() {
-    document.getElementById("rentModal").style.display = "none";
+  document.getElementById("rentModal").style.display = "none";
 }
 
 // Close modal if user clicks outside the modal box
 window.onclick = function(event) {
-    const modal = document.getElementById("rentModal");
-    if (event.target == modal) {
-        closeModal();
-    }
+  const modal = document.getElementById("rentModal");
+  if (event.target == modal) {
+    closeModal();
+  }
 }
 
 // Handle rental form submission and send to backend
@@ -124,9 +146,8 @@ function submitRental(event) {
   .then(data => {
     document.getElementById('rentalConfirmation').style.display = 'block';
     setTimeout(() => {
-    document.getElementById('rentalForm').reset();
+      document.getElementById('rentalForm').reset();
     }, 100);
-
   })
   .catch(error => {
     console.error('Error:', error);
@@ -137,6 +158,11 @@ function submitRental(event) {
 function hideRentalConfirmation() {
   document.getElementById('rentalConfirmation').style.display = 'none';
   closeModal();
+}
+
+function logoutUser() {
+  localStorage.removeItem('user');
+  window.location.href = 'index.html';
 }
 
 </script>
