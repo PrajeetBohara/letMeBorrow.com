@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Page setup: encoding, responsiveness, title, fonts, icons, and styles -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Home - let me borrow</title>
@@ -11,31 +12,31 @@
 </head>
 <body>
 
-  <!-- Navbar -->
+  <!-- Navbar container (populated dynamically) -->
   <header>
     <div id="navbar"></div>
   </header>
 
   <main>
-    <!-- Welcome Banner -->
+    <!-- Dynamic welcome banner for logged-in users -->
     <div id="welcomeBanner" class="welcome-banner" style="display: none;"></div>
 
-    <!-- Hero -->
+    <!-- Hero section -->
     <section class="hero">
       <h2>Rent Tools. Save Money. Empower Projects.</h2>
       <p>Thousands of tools at your fingertips, just when you need them.</p>
     </section>
 
-    <!-- Slideshow -->
+    <!-- Slideshow section (populated with tool images) -->
     <section id="slideshowContainer" class="slideshow-container"></section>
 
-    <!-- Featured Tools -->
+    <!-- Featured tools section -->
     <section class="featured-items">
       <h2>Featured Rentals</h2>
       <div id="featuredTools" class="item-grid"></div>
     </section>
 
-    <!-- Highlights -->
+    <!-- Platform highlights -->
     <section class="benefits">
       <h2>Why letmeBurrow?</h2>
       <ul>
@@ -50,11 +51,12 @@
     <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
   </footer>
 
-  <!-- Rental Modal -->
+  <!-- Rental modal popup -->
   <div id="rentModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
       <h2>Rent Tool</h2>
+      <!-- Rental form -->
       <form id="rentalForm" onsubmit="submitRental(event)">
         <input type="hidden" id="toolId" name="tool_id">
         <input type="text" id="renterName" name="renter_name" placeholder="Your Name" required>
@@ -63,6 +65,7 @@
         <input type="submit" value="Confirm Rental">
       </form>
 
+      <!-- Confirmation message -->
       <p id="rentalConfirmation" class="thank-you-message" style="display: none;">
         ✅ Rental saved successfully!
         <br />
@@ -71,10 +74,11 @@
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- Random generator script for featured tool selection -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
 
   <script>
+    // Update navbar based on user login state
     function updateNavbarSession() {
       const user = JSON.parse(localStorage.getItem('user'));
       const loginLink = document.getElementById('loginLink');
@@ -96,11 +100,13 @@
       }
     }
 
+    // Log out user
     function logoutUser() {
       localStorage.removeItem('user');
       window.location.href = 'index.html';
     }
 
+    // Load navbar from external file and bind toggle events
     function loadNavbar() {
       fetch('navbar.html')
         .then(res => res.text())
@@ -119,6 +125,7 @@
         });
     }
 
+    // Slideshow rotation logic
     function showSlides() {
       const slides = document.getElementsByClassName("slides");
       for (let i = 0; i < slides.length; i++) {
@@ -127,20 +134,23 @@
       slideIndex++;
       if (slideIndex > slides.length) { slideIndex = 1; }
       if (slides.length > 0) {
-        slides[slideIndex-1].style.display = "block";
+        slides[slideIndex - 1].style.display = "block";
       }
-      slideTimer = setTimeout(showSlides, 4000);
+      slideTimer = setTimeout(showSlides, 4000); // auto-rotate every 4s
     }
 
+    // Show rent modal
     function openModal(toolId) {
       document.getElementById("rentModal").style.display = "block";
       document.getElementById("toolId").value = toolId;
     }
 
+    // Close rent modal
     function closeModal() {
       document.getElementById("rentModal").style.display = "none";
     }
 
+    // Handle rental form submission
     function submitRental(event) {
       event.preventDefault();
       const toolId = document.getElementById('toolId').value;
@@ -166,26 +176,30 @@
       });
     }
 
+    // Hide rental confirmation and modal
     function hideRentalConfirmation() {
       document.getElementById('rentalConfirmation').style.display = 'none';
       closeModal();
     }
 
-    // Initialize on page load
+    // Initialize slideshow and load data
     let slideIndex = 0;
     let slideTimer;
 
-    loadNavbar();
+    loadNavbar(); // Load navbar immediately
 
     document.addEventListener("DOMContentLoaded", function () {
+      // Fetch tools and display featured + slideshow
       fetch('http://127.0.0.1:5000/get_tools')
         .then(response => response.json())
         .then(tools => {
+          // Shuffle tools for randomness using today's date as seed
           const today = new Date();
           const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
           Math.seedrandom(seed);
           const shuffled = tools.slice().sort(() => 0.5 - Math.random());
 
+          // Display 2 random tools as featured
           const featuredContainer = document.getElementById('featuredTools');
           featuredContainer.innerHTML = '';
           shuffled.slice(0, 2).forEach(tool => {
@@ -203,6 +217,7 @@
             featuredContainer.appendChild(card);
           });
 
+          // Create slideshow from all tools
           const slideshowContainer = document.getElementById('slideshowContainer');
           slideshowContainer.innerHTML = '';
           tools.forEach(tool => {
@@ -215,7 +230,7 @@
             slideshowContainer.appendChild(slide);
           });
 
-          showSlides();
+          showSlides(); // Start slideshow
         })
         .catch(error => {
           console.error('Error loading tools:', error);

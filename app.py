@@ -5,7 +5,7 @@ import re
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# Ensure required files exist
+# Create required data files if they don't exist
 for filename in ['users.json', 'tools.json', 'owners.json', 'rentals.txt', 'messages.txt']:
     if not os.path.exists(filename):
         with open(filename, 'w') as f:
@@ -15,28 +15,27 @@ for filename in ['users.json', 'tools.json', 'owners.json', 'rentals.txt', 'mess
                 f.write('')
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # Enable Cross-Origin Resource Sharing
 
-
-# Load tools from tools.json
+# Utility function to load tools from file
 def load_tools():
     with open('tools.json', 'r') as f:
         return json.load(f)
 
-
+# Endpoint to get list of tools
 @app.route('/get_tools', methods=['GET'])
 def get_tools():
     tools = load_tools()
     return jsonify(tools)
 
-
+# Endpoint to get list of owners
 @app.route('/get_owners')
 def get_owners():
     with open('owners.json') as f:
         owners = json.load(f)
     return jsonify(owners)
 
-
+# Endpoint to save a rental record
 @app.route('/save_rental', methods=['POST'])
 def save_rental():
     data = request.get_json()
@@ -45,7 +44,7 @@ def save_rental():
     tool_id = data.get('tool_id')
     rental_duration = data.get('rental_duration')
 
-    # Basic validation
+    # Basic input validation
     if not renter_name or not renter_email or not tool_id or not rental_duration:
         return jsonify({'message': 'Missing required fields'}), 400
 
@@ -58,12 +57,13 @@ def save_rental():
     except ValueError:
         return jsonify({'message': 'Invalid tool ID or duration'}), 400
 
+    # Append rental data to file
     with open('rentals.txt', 'a') as file:
         file.write(f"{renter_name},{renter_email},{tool_id},{rental_duration}\n")
 
     return jsonify({'message': 'Rental saved successfully!'}), 200
 
-
+# Endpoint to handle contact form submissions
 @app.route('/contact', methods=['POST'])
 def handle_contact():
     data = request.get_json()
@@ -84,7 +84,7 @@ def handle_contact():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
+# Endpoint for user signup
 @app.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()
@@ -92,18 +92,21 @@ def signup():
     email = data.get('email')
     password = data.get('password')
 
+    # Validate required fields and email format
     if not name or not email or not password:
         return jsonify({'success': False, 'message': 'Missing required fields'}), 400
 
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
         return jsonify({'success': False, 'message': 'Invalid email format'}), 400
 
+    # Check if email is already registered
     with open('users.json', 'r') as f:
         users = json.load(f)
 
     if any(user['email'] == email for user in users):
         return jsonify({'success': False, 'message': 'Email already registered'}), 409
 
+    # Store hashed password and save user
     hashed_password = generate_password_hash(password)
     users.append({'name': name, 'email': email, 'password': hashed_password})
 
@@ -112,7 +115,7 @@ def signup():
 
     return jsonify({'success': True, 'message': 'Signup successful'}), 200
 
-
+# Endpoint for user login
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -125,12 +128,13 @@ def login():
     with open('users.json', 'r') as f:
         users = json.load(f)
 
+    # Authenticate user
     for user in users:
         if user['email'] == email and check_password_hash(user['password'], password):
             return jsonify({'success': True, 'user': {'name': user['name'], 'email': user['email']}}), 200
 
     return jsonify({'success': False, 'message': 'Invalid email or password'}), 401
 
-
+# Start the Flask development server
 if __name__ == '__main__':
     app.run(port=5000)
