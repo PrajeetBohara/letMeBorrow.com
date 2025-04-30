@@ -10,27 +10,29 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <!-- Navbar loaded dynamically -->
   <header>
     <div id="navbar"></div>
   </header>
 
   <main>
+    <!-- Hero section -->
     <section class="hero">
       <h2>Rent Tools. Save Money. Empower Projects.</h2>
       <p>Thousands of tools at your fingertips, just when you need them.</p>
     </section>
 
-    <section id="slideshowContainer" class="slideshow-container">
-      <!-- Dynamic slideshow -->
-    </section>
+    <!-- Slideshow of all tools -->
+    <section id="slideshowContainer" class="slideshow-container"></section>
 
+    <!-- Featured tools (2 per day) -->
     <section class="featured-items">
       <h2>Featured Rentals</h2>
-      <div id="featuredTools" class="item-grid">
-        <!-- Featured rentals load dynamically -->
-      </div>
+      <div id="featuredTools" class="item-grid"></div>
     </section>
 
+    <!-- Platform highlights -->
     <section class="benefits">
       <h2>Why letmeBurrow?</h2>
       <ul>
@@ -45,7 +47,7 @@
     <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
   </footer>
 
-  <!-- ✅ Rent Modal -->
+  <!-- Rental Modal -->
   <div id="rentModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
@@ -57,21 +59,30 @@
         <input type="number" id="rentalDuration" name="rental_duration" placeholder="Days to Rent" required min="1">
         <input type="submit" value="Confirm Rental">
       </form>
+
+      <p id="rentalConfirmation" class="thank-you-message" style="display: none;">
+        ✅ Rental saved successfully!
+        <br />
+        <button onclick="hideRentalConfirmation()" class="thank-you-button">OK</button>
+      </p>
+      
     </div>
   </div>
 
-  <!-- Seedrandom Library -->
+  <!-- For consistent daily randomization -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
 
   <script>
     let slideIndex = 0;
     let slideTimer;
 
-    // Load navbar
+    // Load the navbar
     fetch('navbar.html')
       .then(res => res.text())
       .then(data => {
         document.getElementById('navbar').innerHTML = data;
+
+        // Mobile nav toggle
         const toggleBtn = document.getElementById('navToggle');
         const navLinks = document.getElementById('navLinks');
         if (toggleBtn && navLinks) {
@@ -81,18 +92,18 @@
         }
       });
 
-    // Load slideshow and featured rentals
+    // Load tools and display featured + slideshow
     document.addEventListener("DOMContentLoaded", function() {
       fetch('http://127.0.0.1:5000/get_tools')
         .then(response => response.json())
         .then(tools => {
+          // Seed-based shuffling for consistent daily picks
           const today = new Date();
           const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
           Math.seedrandom(seed);
-
           const shuffled = tools.slice().sort(() => 0.5 - Math.random());
 
-          // Load Featured Rentals (first 2)
+          // Display 2 featured tools
           const featuredContainer = document.getElementById('featuredTools');
           featuredContainer.innerHTML = '';
           shuffled.slice(0, 2).forEach(tool => {
@@ -110,7 +121,7 @@
             featuredContainer.appendChild(card);
           });
 
-          // Load all tools for Slideshow
+          // Load all tools into slideshow
           const slideshowContainer = document.getElementById('slideshowContainer');
           slideshowContainer.innerHTML = '';
           tools.forEach(tool => {
@@ -123,13 +134,14 @@
             slideshowContainer.appendChild(slide);
           });
 
-          showSlides();
+          showSlides(); // Start the slideshow
         })
         .catch(error => {
           console.error('Error loading tools:', error);
         });
     });
 
+    // Rotate slideshow every 4 seconds
     function showSlides() {
       const slides = document.getElementsByClassName("slides");
       for (let i = 0; i < slides.length; i++) {
@@ -143,49 +155,57 @@
       slideTimer = setTimeout(showSlides, 4000);
     }
 
+    // Show rent modal and fill tool ID
     function openModal(toolId) {
       document.getElementById("rentModal").style.display = "block";
       document.getElementById("toolId").value = toolId;
     }
 
+    // Close modal
     function closeModal() {
       document.getElementById("rentModal").style.display = "none";
     }
 
-    function submitRental(event) {
-      event.preventDefault();
+    // Submit rental request to backend
+  function submitRental(event) {
+    event.preventDefault();
 
-      const toolId = document.getElementById('toolId').value;
-      const renterName = document.getElementById('renterName').value;
-      const renterEmail = document.getElementById('renterEmail').value;
-      const rentalDuration = document.getElementById('rentalDuration').value;
+    const toolId = document.getElementById('toolId').value;
+    const renterName = document.getElementById('renterName').value;
+    const renterEmail = document.getElementById('renterEmail').value;
+    const rentalDuration = document.getElementById('rentalDuration').value;
 
-      fetch('http://127.0.0.1:5000/save_rental', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          tool_id: toolId,
-          renter_name: renterName,
-          renter_email: renterEmail,
-          rental_duration: rentalDuration
-        })
+    fetch('http://127.0.0.1:5000/save_rental', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        tool_id: toolId,
+        renter_name: renterName,
+        renter_email: renterEmail,
+        rental_duration: rentalDuration
       })
-      .then(response => response.json())
-      .then(data => {
-        alert(data.message);
-        closeModal();
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('rentalConfirmation').style.display = 'block';
+      setTimeout(() => {
         document.getElementById('rentalForm').reset();
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Failed to submit rental.');
-      });
-    }
+      }, 100); // small delay to avoid repaint conflict
 
-  
-  </script>
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Failed to submit rental.');
+    });
+  }
+
+  function hideRentalConfirmation() {
+    document.getElementById('rentalConfirmation').style.display = 'none';
+    closeModal();
+  }
+</script>
 
 </body>
 </html>
