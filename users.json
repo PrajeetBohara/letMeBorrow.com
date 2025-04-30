@@ -1,0 +1,12 @@
+[
+  {
+    "name": "test",
+    "email": "test@gmail.com",
+    "password": "scrypt:32768:8:1$rHK8L4uRoUxWG268$19dea84db0b28b43c0f597b736503b0823cc84ef96f437f5509ac66811c80986b201719532ff6685619845cb4ffaedbf760f3e0f397521204a946307489c1554"
+  },
+  {
+    "name": "Niraj",
+    "email": "nischalojha2@gmail.com",
+    "password": "scrypt:32768:8:1$RZAr6d0KEdPJbFfY$41e29759ef3e51440d91b0cb513413ee87cdcaf7438940a5a586ee577e350f977e603ac988bbb24d6bb2752e775e5e6091e84ac716b3ea094a123696cabfaf16"
+  }
+]

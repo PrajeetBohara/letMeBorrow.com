@@ -697,6 +697,49 @@ input[type="submit"]:active {
   background-color: #3f50c0;
 }
 
+.welcome-banner {
+  background-color: #e8f0ff;
+  color: #333;
+  font-size: 1.5rem;         /* Increase font size */
+  font-weight: bold;
+  padding: 20px 24px;        /* More padding */
+  margin-bottom: 30px;
+  border-left: 6px solid #5a6dff;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);  /* subtle shadow */
+}
+
+/* ============================
+   PASSWORD FIELD WITH ICON
+============================= */
+.password-group {
+  position: relative;
+}
+
+.password-group input {
+  width: 100%;
+  padding-right: 42px;  /* Space for eye icon */
+  box-sizing: border-box;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #5a6dff;
+  font-size: 1.1rem;
+  z-index: 2;
+}
+
+
+
+
 
 
 

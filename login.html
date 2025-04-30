@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Signup - letmeBurrow</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="images/png" href="images/logo.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div id="navbar"></div>
+  </header>
+
+  <main class="contact-page">
+    <section class="contact-section">
+      <h2 id="formTitle">Login to Your Account</h2>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="contact-form" onsubmit="submitLogin(event)">
+        <div class="form-group">
+          <input type="email" id="loginEmail" required />
+          <label for="loginEmail">Email</label>
+        </div>
+        <div class="form-group password-group">
+          <input type="password" id="loginPassword" required />
+          <label for="loginPassword">Password</label>
+          <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('loginPassword', this)"></i>
+        </div>
+        <input type="submit" value="Login" />
+        <p class="form-switch">Don't have an account? <a href="#" onclick="toggleForm('signup')">Sign up here</a></p>
+      </form>
+
+      <!-- Signup Form -->
+      <form id="signupForm" class="contact-form" onsubmit="submitSignup(event)" style="display: none;">
+        <div class="form-group">
+          <input type="text" id="signupName" required />
+          <label for="signupName">Full Name</label>
+        </div>
+        <div class="form-group">
+          <input type="email" id="signupEmail" required />
+          <label for="signupEmail">Email</label>
+        </div>
+        <div class="form-group password-group">
+          <input type="password" id="signupPassword" required />
+          <label for="signupPassword">Password</label>
+          <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('signupPassword', this)"></i>
+        </div>
+        <input type="submit" value="Sign Up" />
+        <p class="form-switch">Already have an account? <a href="#" onclick="toggleForm('login')">Login here</a></p>
+      </form>
+
+      <div id="authMessage" class="thank-you-message" style="display: none;"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
+  </footer>
+
+  <script>
+    function updateNavbarSession() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const loginLink = document.getElementById('loginLink');
+      const logoutLink = document.getElementById('logoutLink');
+      const userNameSpan = document.getElementById('userName');
+
+      if (user) {
+        loginLink.style.display = 'none';
+        logoutLink.style.display = 'inline-block';
+        userNameSpan.textContent = user.name;
+      } else {
+        loginLink.style.display = 'inline-block';
+        logoutLink.style.display = 'none';
+      }
+    }
+
+    function logoutUser() {
+      localStorage.removeItem('user');
+      window.location.href = 'index.html';
+    }
+
+    function loadNavbar() {
+      fetch('navbar.html')
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById('navbar').innerHTML = html;
+          setTimeout(() => {
+            updateNavbarSession();
+            const toggleBtn = document.getElementById("navToggle");
+            const navLinks = document.getElementById("navLinks");
+            if (toggleBtn && navLinks) {
+              toggleBtn.addEventListener("click", () => {
+                navLinks.classList.toggle("show");
+              });
+            }
+          }, 50);
+        });
+    }
+
+    loadNavbar();
+
+    function toggleForm(type) {
+      const loginForm = document.getElementById('loginForm');
+      const signupForm = document.getElementById('signupForm');
+      const title = document.getElementById('formTitle');
+      document.getElementById('authMessage').style.display = 'none';
+
+      if (type === 'signup') {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
+        title.textContent = 'Create an Account';
+      } else {
+        loginForm.style.display = 'block';
+        signupForm.style.display = 'none';
+        title.textContent = 'Login to Your Account';
+      }
+    }
+
+    function submitLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      fetch('http://127.0.0.1:5000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            localStorage.setItem('user', JSON.stringify(data.user));
+            window.location.href = 'index.html';
+          } else {
+            showMessage(data.message || 'Login failed');
+          }
+        });
+    }
+
+    function submitSignup(event) {
+      event.preventDefault();
+      const name = document.getElementById('signupName').value;
+      const email = document.getElementById('signupEmail').value;
+      const password = document.getElementById('signupPassword').value;
+
+      fetch('http://127.0.0.1:5000/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            toggleForm('login');
+            showMessage('✅ Account created! Please log in.');
+          } else {
+            showMessage(data.message || 'Signup failed');
+          }
+        });
+    }
+
+    function showMessage(msg) {
+      const div = document.getElementById('authMessage');
+      div.textContent = msg;
+      div.style.display = 'block';
+    }
+
+    function togglePassword(inputId, icon) {
+      const input = document.getElementById(inputId);
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+      } else {
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+      }
+    }
+  </script>
+</body>
+</html>
