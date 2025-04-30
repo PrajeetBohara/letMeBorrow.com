@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Meta tags for encoding and responsiveness -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Categories - let me borrow</title>
+
+  <!-- Fonts, icons, favicon, and stylesheet -->
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="icon" type="images/png" href="images/logo.png">
@@ -11,14 +14,14 @@
 </head>
 <body>
   <header>
-    <!-- Navbar will be loaded here dynamically -->
+    <!-- Navbar will be dynamically loaded here -->
     <div id="navbar"></div>
   </header>
 
   <main>
     <section class="category-section">
       <h2 class="browse-heading">Browse by Categories</h2>
-      <!-- Categories will be loaded here from backend -->
+      <!-- Container to hold category cards -->
       <div id="categoryContainer"></div>
     </section>
   </main>
@@ -27,11 +30,13 @@
     <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
   </footer>
 
-  <!-- Rent Modal -->
+  <!-- Rent Modal: Hidden by default, shown on "Rent Now" click -->
   <div id="rentModal" class="modal" style="display:none;">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
       <h2 style="margin-top: 50px;">Rent Tool</h2>
+      
+      <!-- Rental form -->
       <form id="rentalForm" onsubmit="submitRental(event)">
         <input type="hidden" id="toolId" name="tool_id">
         <input type="text" id="renterName" name="renter_name" placeholder="Your Name" required>
@@ -40,21 +45,23 @@
         <input type="submit" value="Confirm Rental">
       </form>
 
-      <p id="rentalConfirmation" class="thank-you-message"  style="display: none;">
+      <!-- Confirmation message -->
+      <p id="rentalConfirmation" class="thank-you-message" style="display: none;">
         ✅ Rental saved successfully!
         <br />
         <button onclick="hideRentalConfirmation()" class="thank-you-button">OK</button>
       </p>
-      
     </div>
   </div>
 
   <script>
-    // Load navbar from separate HTML file
+    // Load navbar HTML from external file
     fetch('navbar.html')
       .then(res => res.text())
       .then(data => {
         document.getElementById('navbar').innerHTML = data;
+
+        // Handle mobile nav toggle
         const toggleBtn = document.getElementById('navToggle');
         const navLinks = document.getElementById('navLinks');
         if (toggleBtn && navLinks) {
@@ -64,14 +71,14 @@
         }
       });
 
-    // Fetch tools from backend and group them by category
+    // Fetch tools and organize them into categories
     document.addEventListener("DOMContentLoaded", function() {
       fetch('http://127.0.0.1:5000/get_tools')
         .then(response => response.json())
         .then(tools => {
           const categories = {};
 
-          // Organize tools by category name
+          // Group tools by category
           tools.forEach(tool => {
             const type = tool.category || "Uncategorized";
             if (!categories[type]) {
@@ -83,7 +90,7 @@
           const container = document.getElementById('categoryContainer');
           container.innerHTML = '';
 
-          // Render each category section
+          // Render category sections and tool cards
           for (let category in categories) {
             const section = document.createElement('div');
             section.className = 'category-section';
@@ -92,7 +99,6 @@
             const items = document.createElement('div');
             items.className = 'category-items';
 
-            // Render each tool card
             categories[category].forEach(tool => {
               const card = document.createElement('div');
               card.className = 'category-card';
@@ -114,18 +120,18 @@
         });
     });
 
-    // Open rental modal
+    // Show rental modal and store selected tool ID
     function openModal(toolId) {
       document.getElementById("rentModal").style.display = "block";
       document.getElementById("toolId").value = toolId;
     }
 
-    // Close modal
+    // Hide rental modal
     function closeModal() {
       document.getElementById("rentModal").style.display = "none";
     }
 
-    // Close modal if user clicks outside
+    // Close modal if user clicks outside the modal content
     window.onclick = function(event) {
       const modal = document.getElementById("rentModal");
       if (event.target == modal) {
@@ -133,46 +139,46 @@
       }
     }
 
-    // Submit rental data to backend
-  function submitRental(event) {
-    event.preventDefault();
+    // Submit rental form to backend
+    function submitRental(event) {
+      event.preventDefault();
 
-    const toolId = document.getElementById('toolId').value;
-    const renterName = document.getElementById('renterName').value;
-    const renterEmail = document.getElementById('renterEmail').value;
-    const rentalDuration = document.getElementById('rentalDuration').value;
+      const toolId = document.getElementById('toolId').value;
+      const renterName = document.getElementById('renterName').value;
+      const renterEmail = document.getElementById('renterEmail').value;
+      const rentalDuration = document.getElementById('rentalDuration').value;
 
-    fetch('http://127.0.0.1:5000/save_rental', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        tool_id: toolId,
-        renter_name: renterName,
-        renter_email: renterEmail,
-        rental_duration: rentalDuration
+      // Send rental data to backend
+      fetch('http://127.0.0.1:5000/save_rental', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          tool_id: toolId,
+          renter_name: renterName,
+          renter_email: renterEmail,
+          rental_duration: rentalDuration
+        })
       })
-    })
-    .then(response => response.json())
-    .then(data => {
-      document.getElementById('rentalConfirmation').style.display = 'block';
-      setTimeout(() => {
-        document.getElementById('rentalForm').reset();
-      }, 100); // small delay to avoid repaint conflict
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('rentalConfirmation').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('rentalForm').reset(); // Clear form after short delay
+        }, 100);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to submit rental.');
+      });
+    }
 
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('Failed to submit rental.');
-    });
-  }
-
-  function hideRentalConfirmation() {
-    document.getElementById('rentalConfirmation').style.display = 'none';
-    closeModal();
-  }
-
+    // Hide confirmation and close modal
+    function hideRentalConfirmation() {
+      document.getElementById('rentalConfirmation').style.display = 'none';
+      closeModal();
+    }
   </script>
 
 </body>

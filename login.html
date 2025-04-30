@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Meta setup and page resources -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login / Signup - letmeBurrow</title>
@@ -9,6 +10,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+
+  <!-- Navbar placeholder -->
   <header>
     <div id="navbar"></div>
   </header>
@@ -26,9 +29,11 @@
         <div class="form-group password-group">
           <input type="password" id="loginPassword" required />
           <label for="loginPassword">Password</label>
+          <!-- Password visibility toggle -->
           <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('loginPassword', this)"></i>
         </div>
         <input type="submit" value="Login" />
+        <!-- Switch to signup form -->
         <p class="form-switch">Don't have an account? <a href="#" onclick="toggleForm('signup')">Sign up here</a></p>
       </form>
 
@@ -48,9 +53,11 @@
           <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('signupPassword', this)"></i>
         </div>
         <input type="submit" value="Sign Up" />
+        <!-- Switch to login form -->
         <p class="form-switch">Already have an account? <a href="#" onclick="toggleForm('login')">Login here</a></p>
       </form>
 
+      <!-- Message display area -->
       <div id="authMessage" class="thank-you-message" style="display: none;"></div>
     </section>
   </main>
@@ -60,6 +67,7 @@
   </footer>
 
   <script>
+    // Update navbar based on session
     function updateNavbarSession() {
       const user = JSON.parse(localStorage.getItem('user'));
       const loginLink = document.getElementById('loginLink');
@@ -76,11 +84,13 @@
       }
     }
 
+    // Logout function
     function logoutUser() {
       localStorage.removeItem('user');
       window.location.href = 'index.html';
     }
 
+    // Load navbar HTML dynamically
     function loadNavbar() {
       fetch('navbar.html')
         .then(res => res.text())
@@ -99,8 +109,9 @@
         });
     }
 
-    loadNavbar();
+    loadNavbar(); // Call on load
 
+    // Toggle between login and signup forms
     function toggleForm(type) {
       const loginForm = document.getElementById('loginForm');
       const signupForm = document.getElementById('signupForm');
@@ -118,6 +129,7 @@
       }
     }
 
+    // Handle login form submission
     function submitLogin(event) {
       event.preventDefault();
       const email = document.getElementById('loginEmail').value;
@@ -132,13 +144,14 @@
         .then(data => {
           if (data.success) {
             localStorage.setItem('user', JSON.stringify(data.user));
-            window.location.href = 'index.html';
+            window.location.href = 'index.html'; // Redirect on success
           } else {
             showMessage(data.message || 'Login failed');
           }
         });
     }
 
+    // Handle signup form submission
     function submitSignup(event) {
       event.preventDefault();
       const name = document.getElementById('signupName').value;
@@ -153,7 +166,7 @@
         .then(res => res.json())
         .then(data => {
           if (data.success) {
-            toggleForm('login');
+            toggleForm('login'); // Switch to login on success
             showMessage('✅ Account created! Please log in.');
           } else {
             showMessage(data.message || 'Signup failed');
@@ -161,12 +174,14 @@
         });
     }
 
+    // Display alert or confirmation message
     function showMessage(msg) {
       const div = document.getElementById('authMessage');
       div.textContent = msg;
       div.style.display = 'block';
     }
 
+    // Toggle password visibility
     function togglePassword(inputId, icon) {
       const input = document.getElementById(inputId);
       if (input.type === "password") {

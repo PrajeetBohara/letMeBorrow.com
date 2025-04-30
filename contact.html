@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Meta tags for proper rendering and mobile responsiveness -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact Us - letmeBurrow</title>
+
+  <!-- Fonts and favicon -->
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet" />
   <link rel="icon" type="images/png" href="images/logo.png">
+
+  <!-- External stylesheet -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <div id="navbar"></div>
+    <div id="navbar"></div> <!-- Placeholder for navbar content -->
   </header>
 
   <main class="contact-page">
@@ -18,6 +23,7 @@
       <h2>Contact Our Team</h2>
       <p class="contact-subtext">Have a question, concern, or rental inquiry? Use the form below to reach out to us.</p>
 
+      <!-- Contact form with required fields -->
       <form class="contact-form" onsubmit="submitContact(event)">
         <div class="form-group">
           <input type="text" id="fullName" required />
@@ -47,16 +53,15 @@
         <input type="submit" value="Submit Request" />
       </form>
 
-    <div id="thankYouWrapper" class="thank-you-message" style="display: none;">
+      <!-- Thank-you message shown after form submission -->
+      <div id="thankYouWrapper" class="thank-you-message" style="display: none;">
         ✅ Thank you! Your inquiry has been submitted.
-      <br />
-      <button onclick="hideThankYou()" class="thank-you-button">
-        OK
-      </button>
-    </div>
-
+        <br />
+        <button onclick="hideThankYou()" class="thank-you-button">OK</button>
+      </div>
     </section>
 
+    <!-- Static customer support information -->
     <section class="contact-info">
       <h3>Customer Support</h3>
       <p>Email: support@letmeburrow.com</p>
@@ -70,12 +75,13 @@
   </footer>
 
   <script>
-    // Load navbar
+    // Load and inject the navbar HTML
     fetch('navbar.html')
       .then(res => res.text())
       .then(data => {
         document.getElementById('navbar').innerHTML = data;
 
+        // Enable mobile navbar toggle functionality
         const toggleBtn = document.getElementById("navToggle");
         const navLinks = document.getElementById("navLinks");
         if (toggleBtn && navLinks) {
@@ -85,10 +91,11 @@
         }
       });
 
-    // Submit contact form
+    // Handle contact form submission
     function submitContact(event) {
-      event.preventDefault();
+      event.preventDefault(); // Prevent form reload
 
+      // Gather form data
       const name = document.getElementById("fullName").value;
       const email = document.getElementById("email").value;
       const phone = document.getElementById("phone").value;
@@ -97,6 +104,7 @@
 
       const data = { name, email, phone, reason, message };
 
+      // Send POST request to backend
       fetch('http://127.0.0.1:5000/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -104,8 +112,8 @@
       })
       .then(res => res.json())
       .then(response => {
-        document.querySelector('.contact-form').reset();
-        document.getElementById('thankYouWrapper').style.display = 'block';
+        document.querySelector('.contact-form').reset(); // Clear form
+        document.getElementById('thankYouWrapper').style.display = 'block'; // Show thank-you message
       })
       .catch(err => {
         console.error(err);
@@ -113,10 +121,10 @@
       });
     }
 
-  function hideThankYou() {
-    document.getElementById('thankYouWrapper').style.display = 'none';
-  }
-
+    // Hide thank-you message
+    function hideThankYou() {
+      document.getElementById('thankYouWrapper').style.display = 'none';
+    }
   </script>
 </body>
 </html>
