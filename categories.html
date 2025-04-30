@@ -11,15 +11,15 @@
 </head>
 <body>
   <header>
+    <!-- Navbar will be loaded here dynamically -->
     <div id="navbar"></div>
   </header>
 
   <main>
     <section class="category-section">
       <h2 class="browse-heading">Browse by Categories</h2>
-      <div id="categoryContainer">
-        <!-- Categories will load dynamically here -->
-      </div>
+      <!-- Categories will be loaded here from backend -->
+      <div id="categoryContainer"></div>
     </section>
   </main>
 
@@ -27,7 +27,7 @@
     <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
   </footer>
 
-  <!-- ✅ Rent Modal -->
+  <!-- Rent Modal -->
   <div id="rentModal" class="modal" style="display:none;">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
@@ -39,12 +39,18 @@
         <input type="number" id="rentalDuration" name="rental_duration" placeholder="Days to Rent" required min="1">
         <input type="submit" value="Confirm Rental">
       </form>
+
+      <p id="rentalConfirmation" class="thank-you-message"  style="display: none;">
+        ✅ Rental saved successfully!
+        <br />
+        <button onclick="hideRentalConfirmation()" class="thank-you-button">OK</button>
+      </p>
+      
     </div>
   </div>
 
-  <!-- ✅ Script Section -->
   <script>
-    // Load navbar dynamically
+    // Load navbar from separate HTML file
     fetch('navbar.html')
       .then(res => res.text())
       .then(data => {
@@ -58,14 +64,14 @@
         }
       });
 
-    // Load and display tools grouped by categories
+    // Fetch tools from backend and group them by category
     document.addEventListener("DOMContentLoaded", function() {
       fetch('http://127.0.0.1:5000/get_tools')
         .then(response => response.json())
         .then(tools => {
           const categories = {};
 
-          // Group tools by their category
+          // Organize tools by category name
           tools.forEach(tool => {
             const type = tool.category || "Uncategorized";
             if (!categories[type]) {
@@ -77,6 +83,7 @@
           const container = document.getElementById('categoryContainer');
           container.innerHTML = '';
 
+          // Render each category section
           for (let category in categories) {
             const section = document.createElement('div');
             section.className = 'category-section';
@@ -85,6 +92,7 @@
             const items = document.createElement('div');
             items.className = 'category-items';
 
+            // Render each tool card
             categories[category].forEach(tool => {
               const card = document.createElement('div');
               card.className = 'category-card';
@@ -106,16 +114,18 @@
         });
     });
 
-    // Modal functions
+    // Open rental modal
     function openModal(toolId) {
       document.getElementById("rentModal").style.display = "block";
       document.getElementById("toolId").value = toolId;
     }
 
+    // Close modal
     function closeModal() {
       document.getElementById("rentModal").style.display = "none";
     }
 
+    // Close modal if user clicks outside
     window.onclick = function(event) {
       const modal = document.getElementById("rentModal");
       if (event.target == modal) {
@@ -123,38 +133,46 @@
       }
     }
 
-    // Submit rental form
-    function submitRental(event) {
-      event.preventDefault();
+    // Submit rental data to backend
+  function submitRental(event) {
+    event.preventDefault();
 
-      const toolId = document.getElementById('toolId').value;
-      const renterName = document.getElementById('renterName').value;
-      const renterEmail = document.getElementById('renterEmail').value;
-      const rentalDuration = document.getElementById('rentalDuration').value;
+    const toolId = document.getElementById('toolId').value;
+    const renterName = document.getElementById('renterName').value;
+    const renterEmail = document.getElementById('renterEmail').value;
+    const rentalDuration = document.getElementById('rentalDuration').value;
 
-      fetch('http://127.0.0.1:5000/save_rental', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          tool_id: toolId,
-          renter_name: renterName,
-          renter_email: renterEmail,
-          rental_duration: rentalDuration
-        })
+    fetch('http://127.0.0.1:5000/save_rental', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        tool_id: toolId,
+        renter_name: renterName,
+        renter_email: renterEmail,
+        rental_duration: rentalDuration
       })
-      .then(response => response.json())
-      .then(data => {
-        alert(data.message);
-        closeModal();
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('rentalConfirmation').style.display = 'block';
+      setTimeout(() => {
         document.getElementById('rentalForm').reset();
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Failed to submit rental.');
-      });
-    }
+      }, 100); // small delay to avoid repaint conflict
+
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Failed to submit rental.');
+    });
+  }
+
+  function hideRentalConfirmation() {
+    document.getElementById('rentalConfirmation').style.display = 'none';
+    closeModal();
+  }
+
   </script>
 
 </body>

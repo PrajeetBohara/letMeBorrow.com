@@ -9,22 +9,21 @@
 <body>
 
 <header>
+    <!-- Navbar will be loaded here dynamically -->
     <div id="navbar"></div>
 </header>
 
 <main class="browse-container">
     <h2 class="browse-heading">Explore Available Tools</h2>
-
-    <div class="tool-grid" id="toolGrid">
-        <!-- Tools will load here dynamically -->
-    </div>
+    <!-- Container for tool cards loaded from backend -->
+    <div class="tool-grid" id="toolGrid"></div>
 </main>
 
 <footer>
     <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
 </footer>
 
-<!-- Modal for Renting -->
+<!-- Rental Modal -->
 <div id="rentModal" class="modal" style="display: none;">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -36,25 +35,33 @@
             <input type="number" id="rentalDuration" name="rental_duration" placeholder="Days to Rent" required min="1">
             <input type="submit" value="Confirm Rental">
         </form>
+
+        <p id="rentalConfirmation" class="thank-you-message" style="display: none;">
+            ✅ Rental saved successfully!
+            <br />
+            <button onclick="hideRentalConfirmation()" class="thank-you-button">OK</button>
+          </p>
+          
     </div>
 </div>
 
 <script>
-// Load navbar dynamically
+// Load the navbar content from navbar.html
 fetch('navbar.html')
     .then(res => res.text())
     .then(data => {
         document.getElementById('navbar').innerHTML = data;
     });
 
-// Fetch and display tools dynamically from backend (Python Flask)
+// Fetch tools from backend and render them on the page
 document.addEventListener("DOMContentLoaded", function() {
     fetch('http://127.0.0.1:5000/get_tools')
         .then(response => response.json())
         .then(tools => {
             const grid = document.getElementById('toolGrid');
-            grid.innerHTML = '';  // Clear the grid before adding tools
+            grid.innerHTML = ''; // Clear existing content
 
+            // Create and append tool cards
             tools.forEach(tool => {
                 const card = document.createElement('div');
                 card.className = 'tool-card';
@@ -73,20 +80,18 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 });
 
-// Modal Logic
-// Open the modal when "Rent Now" is clicked
+// Open rental modal and set tool ID
 function openModal(toolId) {
-    console.log('Opening modal for tool ID:', toolId);  // Debugging log
     document.getElementById("rentModal").style.display = "block";
     document.getElementById("toolId").value = toolId;
 }
 
-// Close the modal when close button is clicked
+// Close rental modal
 function closeModal() {
     document.getElementById("rentModal").style.display = "none";
 }
 
-// Close the modal when clicking outside the modal
+// Close modal if user clicks outside the modal box
 window.onclick = function(event) {
     const modal = document.getElementById("rentModal");
     if (event.target == modal) {
@@ -94,37 +99,44 @@ window.onclick = function(event) {
     }
 }
 
-// Submit the rental form to backend (Flask)
+// Handle rental form submission and send to backend
 function submitRental(event) {
-    event.preventDefault();
+  event.preventDefault();
 
-    const toolId = document.getElementById('toolId').value;
-    const renterName = document.getElementById('renterName').value;
-    const renterEmail = document.getElementById('renterEmail').value;
-    const rentalDuration = document.getElementById('rentalDuration').value;
+  const toolId = document.getElementById('toolId').value;
+  const renterName = document.getElementById('renterName').value;
+  const renterEmail = document.getElementById('renterEmail').value;
+  const rentalDuration = document.getElementById('rentalDuration').value;
 
-    fetch('http://127.0.0.1:5000/save_rental', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            tool_id: toolId,
-            renter_name: renterName,
-            renter_email: renterEmail,
-            rental_duration: rentalDuration
-        })
+  fetch('http://127.0.0.1:5000/save_rental', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      tool_id: toolId,
+      renter_name: renterName,
+      renter_email: renterEmail,
+      rental_duration: rentalDuration
     })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message);
-        closeModal();
-        document.getElementById('rentalForm').reset();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Failed to submit rental.');
-    });
+  })
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById('rentalConfirmation').style.display = 'block';
+    setTimeout(() => {
+    document.getElementById('rentalForm').reset();
+    }, 100);
+
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Failed to submit rental.');
+  });
+}
+
+function hideRentalConfirmation() {
+  document.getElementById('rentalConfirmation').style.display = 'none';
+  closeModal();
 }
 
 </script>
