@@ -18,31 +18,50 @@
       <h2>Contact Our Team</h2>
       <p class="contact-subtext">Have a question, concern, or rental inquiry? Use the form below to reach out to us.</p>
 
-      <form class="contact-form" onsubmit="showThankYou(event)">
-        <input type="text" name="name" placeholder="Your Full Name" required />
-        <input type="email" name="email" placeholder="Your Email Address" required />
-        <input type="tel" name="phone" placeholder="Phone Number (optional)" />
-        <select name="reason" required>
-          <option value="">Select a reason for contact</option>
-          <option value="rental">Rental Inquiry</option>
-          <option value="return">Return or Issue</option>
-          <option value="partner">Partner With Us</option>
-          <option value="other">Other</option>
-        </select>
-        <textarea name="message" placeholder="Your Message" rows="6" required></textarea>
+      <form class="contact-form" onsubmit="submitContact(event)">
+        <div class="form-group">
+          <input type="text" id="fullName" required />
+          <label for="fullName">Your Full Name</label>
+        </div>
+        <div class="form-group">
+          <input type="email" id="email" required />
+          <label for="email">Your Email Address</label>
+        </div>
+        <div class="form-group">
+          <input type="text" id="phone" />
+          <label for="phone">Phone Number (optional)</label>
+        </div>
+        <div class="form-group">
+          <select id="reason" required>
+            <option value="" disabled selected>Select a reason for contact</option>
+            <option>Rental Inquiry</option>
+            <option>Technical Issue</option>
+            <option>Suggestion</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <textarea id="message" rows="4" required></textarea>
+          <label for="message">Your Message</label>
+        </div>
         <input type="submit" value="Submit Request" />
       </form>
 
-      <div id="thankYouMessage" style="display:none; margin-top: 20px; color: green; font-weight: bold;">
-        Thank you for reaching out! We'll get back to you shortly.
-      </div>
+    <div id="thankYouWrapper" class="thank-you-message" style="display: none;">
+        ✅ Thank you! Your inquiry has been submitted.
+      <br />
+      <button onclick="hideThankYou()" class="thank-you-button">
+        OK
+      </button>
+    </div>
 
-      <div class="contact-info">
-        <h3>Customer Support</h3>
-        <p>Email: support@letmeburrow.com</p>
-        <p>Phone: +1 (800) 555-666</p>
-        <p>Hours: Mon–Fri, 9am – 6pm CST</p>
-      </div>
+    </section>
+
+    <section class="contact-info">
+      <h3>Customer Support</h3>
+      <p>Email: support@letmeburrow.com</p>
+      <p>Phone: +1 (800) 555-666</p>
+      <p>Hours: Mon–Fri, 9am – 6pm CST</p>
     </section>
   </main>
 
@@ -51,6 +70,7 @@
   </footer>
 
   <script>
+    // Load navbar
     fetch('navbar.html')
       .then(res => res.text())
       .then(data => {
@@ -63,22 +83,40 @@
             navLinks.classList.toggle("show");
           });
         }
-
-        // Add 'Contact' to the navbar if not already present
-        const nav = document.getElementById("navLinks");
-        if (nav && ![...nav.children].some(a => a.href.includes("contact.html"))) {
-          const contactLink = document.createElement("a");
-          contactLink.href = "contact.html";
-          contactLink.textContent = "Contact";
-          nav.appendChild(contactLink);
-        }
       });
 
-    function showThankYou(event) {
+    // Submit contact form
+    function submitContact(event) {
       event.preventDefault();
-      document.querySelector('.contact-form').reset();
-      document.getElementById('thankYouMessage').style.display = 'block';
+
+      const name = document.getElementById("fullName").value;
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+      const reason = document.getElementById("reason").value;
+      const message = document.getElementById("message").value;
+
+      const data = { name, email, phone, reason, message };
+
+      fetch('http://127.0.0.1:5000/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(response => {
+        document.querySelector('.contact-form').reset();
+        document.getElementById('thankYouWrapper').style.display = 'block';
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Something went wrong. Please try again.");
+      });
     }
+
+  function hideThankYou() {
+    document.getElementById('thankYouWrapper').style.display = 'none';
+  }
+
   </script>
 </body>
 </html>

@@ -7,6 +7,13 @@ from flask_cors import CORS  # Import Flask-CORS
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
+@app.route('/get_owners')
+def get_owners():
+    with open('owners.json') as f:
+        owners = json.load(f)
+    return jsonify(owners)
+
+
 # Sample tools data (loaded from tools.json)
 def load_tools():
     with open('tools.json', 'r') as f:
@@ -20,6 +27,10 @@ def get_tools():
 # Rentals part stays the same as before
 if not os.path.exists('rentals.txt'):
     open('rentals.txt', 'w').close()
+
+if not os.path.exists('messages.txt'):
+    open('messages.txt', 'w').close()
+
 
 @app.route('/save_rental', methods=['POST'])
 def save_rental():
@@ -44,6 +55,30 @@ def save_rental():
         file.write(f"{renter_name},{renter_email},{tool_id}\n")
 
     return jsonify({'message': 'Rental saved successfully!'}), 200
+
+@app.route('/contact', methods=['POST'])
+def handle_contact():
+    data = request.get_json()
+
+    # Validate required fields
+    if not data.get("name") or not data.get("email") or not data.get("message"):
+        return jsonify({"error": "Missing fields"}), 400
+
+    try:
+        with open('messages.txt', 'a') as f:
+            f.write(
+                f"Name: {data['name']}\n"
+                f"Email: {data['email']}\n"
+                f"Phone: {data.get('phone', 'N/A')}\n"
+                f"Reason: {data.get('reason', 'N/A')}\n"
+                f"Message: {data['message']}\n"
+                f"{'-'*30}\n"
+            )
+        return jsonify({"message": "Message received"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(port=5000)
