@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Meta tags for proper rendering and mobile responsiveness -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact Us - letmeBurrow</title>
@@ -9,8 +8,6 @@
   <!-- Fonts and favicon -->
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet" />
   <link rel="icon" type="images/png" href="images/logo.png">
-
-  <!-- External stylesheet -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -23,7 +20,6 @@
       <h2>Contact Our Team</h2>
       <p class="contact-subtext">Have a question, concern, or rental inquiry? Use the form below to reach out to us.</p>
 
-      <!-- Contact form with required fields -->
       <form class="contact-form" onsubmit="submitContact(event)">
         <div class="form-group">
           <input type="text" id="fullName" required />
@@ -53,7 +49,6 @@
         <input type="submit" value="Submit Request" />
       </form>
 
-      <!-- Thank-you message shown after form submission -->
       <div id="thankYouWrapper" class="thank-you-message" style="display: none;">
         ✅ Thank you! Your inquiry has been submitted.
         <br />
@@ -61,7 +56,6 @@
       </div>
     </section>
 
-    <!-- Static customer support information -->
     <section class="contact-info">
       <h3>Customer Support</h3>
       <p>Email: support@letmeburrow.com</p>
@@ -81,21 +75,34 @@
       .then(data => {
         document.getElementById('navbar').innerHTML = data;
 
-        // Enable mobile navbar toggle functionality
-        const toggleBtn = document.getElementById("navToggle");
-        const navLinks = document.getElementById("navLinks");
-        if (toggleBtn && navLinks) {
-          toggleBtn.addEventListener("click", () => {
-            navLinks.classList.toggle("show");
-          });
-        }
+        setTimeout(() => {
+          const user = JSON.parse(localStorage.getItem('user'));
+          const loginLink = document.getElementById('loginLink');
+          const logoutLink = document.getElementById('logoutLink');
+          const userNameSpan = document.getElementById('userName');
+          if (user) {
+            loginLink.style.display = 'none';
+            logoutLink.style.display = 'inline-block';
+            userNameSpan.textContent = user.name;
+          } else {
+            loginLink.style.display = 'inline-block';
+            logoutLink.style.display = 'none';
+          }
+
+          const toggleBtn = document.getElementById("navToggle");
+          const navLinks = document.getElementById("navLinks");
+          if (toggleBtn && navLinks) {
+            toggleBtn.addEventListener("click", () => {
+              navLinks.classList.toggle("show");
+            });
+          }
+        }, 50);
       });
 
     // Handle contact form submission
     function submitContact(event) {
-      event.preventDefault(); // Prevent form reload
+      event.preventDefault();
 
-      // Gather form data
       const name = document.getElementById("fullName").value;
       const email = document.getElementById("email").value;
       const phone = document.getElementById("phone").value;
@@ -104,7 +111,6 @@
 
       const data = { name, email, phone, reason, message };
 
-      // Send POST request to backend
       fetch('http://127.0.0.1:5000/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -112,8 +118,8 @@
       })
       .then(res => res.json())
       .then(response => {
-        document.querySelector('.contact-form').reset(); // Clear form
-        document.getElementById('thankYouWrapper').style.display = 'block'; // Show thank-you message
+        document.querySelector('.contact-form').reset();
+        document.getElementById('thankYouWrapper').style.display = 'block';
       })
       .catch(err => {
         console.error(err);
@@ -125,6 +131,12 @@
     function hideThankYou() {
       document.getElementById('thankYouWrapper').style.display = 'none';
     }
+
+    function logoutUser() {
+      localStorage.removeItem('user');
+      window.location.href = 'index.html';
+    }
+
   </script>
 </body>
 </html>

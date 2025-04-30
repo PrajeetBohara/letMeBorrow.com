@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Meta tags for encoding and responsiveness -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Categories - let me borrow</title>
@@ -14,14 +13,12 @@
 </head>
 <body>
   <header>
-    <!-- Navbar will be dynamically loaded here -->
-    <div id="navbar"></div>
+    <div id="navbar"></div> <!-- Navbar will be loaded here -->
   </header>
 
   <main>
     <section class="category-section">
       <h2 class="browse-heading">Browse by Categories</h2>
-      <!-- Container to hold category cards -->
       <div id="categoryContainer"></div>
     </section>
   </main>
@@ -30,13 +27,12 @@
     <p>&copy; 2025 letmeBurrow.com | Tool Renting Marketplace</p>
   </footer>
 
-  <!-- Rent Modal: Hidden by default, shown on "Rent Now" click -->
+  <!-- Rental Modal -->
   <div id="rentModal" class="modal" style="display:none;">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
       <h2 style="margin-top: 50px;">Rent Tool</h2>
-      
-      <!-- Rental form -->
+
       <form id="rentalForm" onsubmit="submitRental(event)">
         <input type="hidden" id="toolId" name="tool_id">
         <input type="text" id="renterName" name="renter_name" placeholder="Your Name" required>
@@ -45,7 +41,6 @@
         <input type="submit" value="Confirm Rental">
       </form>
 
-      <!-- Confirmation message -->
       <p id="rentalConfirmation" class="thank-you-message" style="display: none;">
         ✅ Rental saved successfully!
         <br />
@@ -61,24 +56,36 @@
       .then(data => {
         document.getElementById('navbar').innerHTML = data;
 
-        // Handle mobile nav toggle
-        const toggleBtn = document.getElementById('navToggle');
-        const navLinks = document.getElementById('navLinks');
-        if (toggleBtn && navLinks) {
-          toggleBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('show');
-          });
-        }
+        setTimeout(() => {
+          const user = JSON.parse(localStorage.getItem('user'));
+          const loginLink = document.getElementById('loginLink');
+          const logoutLink = document.getElementById('logoutLink');
+          const userNameSpan = document.getElementById('userName');
+          if (user) {
+            loginLink.style.display = 'none';
+            logoutLink.style.display = 'inline-block';
+            userNameSpan.textContent = user.name;
+          } else {
+            loginLink.style.display = 'inline-block';
+            logoutLink.style.display = 'none';
+          }
+
+          const toggleBtn = document.getElementById("navToggle");
+          const navLinks = document.getElementById("navLinks");
+          if (toggleBtn && navLinks) {
+            toggleBtn.addEventListener("click", () => {
+              navLinks.classList.toggle("show");
+            });
+          }
+        }, 50);
       });
 
-    // Fetch tools and organize them into categories
+    // Fetch tools and organize by category
     document.addEventListener("DOMContentLoaded", function() {
       fetch('http://127.0.0.1:5000/get_tools')
         .then(response => response.json())
         .then(tools => {
           const categories = {};
-
-          // Group tools by category
           tools.forEach(tool => {
             const type = tool.category || "Uncategorized";
             if (!categories[type]) {
@@ -90,7 +97,6 @@
           const container = document.getElementById('categoryContainer');
           container.innerHTML = '';
 
-          // Render category sections and tool cards
           for (let category in categories) {
             const section = document.createElement('div');
             section.className = 'category-section';
@@ -120,18 +126,15 @@
         });
     });
 
-    // Show rental modal and store selected tool ID
     function openModal(toolId) {
       document.getElementById("rentModal").style.display = "block";
       document.getElementById("toolId").value = toolId;
     }
 
-    // Hide rental modal
     function closeModal() {
       document.getElementById("rentModal").style.display = "none";
     }
 
-    // Close modal if user clicks outside the modal content
     window.onclick = function(event) {
       const modal = document.getElementById("rentModal");
       if (event.target == modal) {
@@ -139,7 +142,6 @@
       }
     }
 
-    // Submit rental form to backend
     function submitRental(event) {
       event.preventDefault();
 
@@ -148,24 +150,16 @@
       const renterEmail = document.getElementById('renterEmail').value;
       const rentalDuration = document.getElementById('rentalDuration').value;
 
-      // Send rental data to backend
       fetch('http://127.0.0.1:5000/save_rental', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          tool_id: toolId,
-          renter_name: renterName,
-          renter_email: renterEmail,
-          rental_duration: rentalDuration
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tool_id: toolId, renter_name: renterName, renter_email: renterEmail, rental_duration: rentalDuration })
       })
       .then(response => response.json())
       .then(data => {
         document.getElementById('rentalConfirmation').style.display = 'block';
         setTimeout(() => {
-          document.getElementById('rentalForm').reset(); // Clear form after short delay
+          document.getElementById('rentalForm').reset();
         }, 100);
       })
       .catch(error => {
@@ -174,11 +168,16 @@
       });
     }
 
-    // Hide confirmation and close modal
     function hideRentalConfirmation() {
       document.getElementById('rentalConfirmation').style.display = 'none';
       closeModal();
     }
+
+    function logoutUser() {
+      localStorage.removeItem('user');
+      window.location.href = 'index.html';
+    }
+
   </script>
 
 </body>
